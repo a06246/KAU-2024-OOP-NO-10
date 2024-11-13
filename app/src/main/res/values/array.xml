@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="인원">
+        <item>1인</item>
+        <item>2인</item>
+        <item>3인</item>
+    </string-array>
+</resources>

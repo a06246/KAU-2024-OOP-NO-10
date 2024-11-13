@@ -12,18 +12,28 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AccountBooks"
         tools:targetApi="31">
+
+        <!-- Budget 액티비티를 기본 액티비티로 설정 -->
         <activity
-            android:name=".Calendar"
-            android:exported="false" />
-        <activity
-            android:name=".MainActivity"
+            android:name=".Budget"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <!-- 기본 액티비티 설정 끝 -->
+
+        <activity
+            android:name=".Calendar"
+            android:exported="false" />
+
+        <!-- MainActivity는 더 이상 기본 액티비티로 설정되지 않음 -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+        </activity>
+
     </application>
 
 </manifest>
