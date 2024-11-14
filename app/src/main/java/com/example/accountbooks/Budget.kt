@@ -2,12 +2,7 @@ package com.example.accountbooks
 
 import android.os.Bundle
 import android.view.View
-import android.widget.AdapterView
-import android.widget.Button
-import android.widget.EditText
-import android.widget.LinearLayout
-import android.widget.Spinner
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -24,10 +19,11 @@ class Budget : AppCompatActivity() {
             insets
         }
 
-        // Spinner와 inputContainer 참조
+        // 뷰 초기화
         val spinner = findViewById<Spinner>(R.id.spinner)
         val inputContainer = findViewById<LinearLayout>(R.id.nameContainer)
         val submitButton = findViewById<Button>(R.id.btnSubmit)
+        val scrollViewContainer = findViewById<ScrollView>(R.id.scrollViewContainer)
 
         // Spinner에서 선택된 인원 수에 따라 입력 필드 생성
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -66,6 +62,7 @@ class Budget : AppCompatActivity() {
             Toast.makeText(this, "입력이 완료되었습니다.", Toast.LENGTH_SHORT).show()
             // 입력 완료 버튼을 사라지게 설정
             submitButton.visibility = View.GONE
+            scrollViewContainer.visibility = View.VISIBLE // 스크롤 뷰를 보이도록 설정
         }
     }
 }

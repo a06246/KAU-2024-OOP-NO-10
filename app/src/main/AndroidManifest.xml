@@ -13,11 +13,9 @@
         android:theme="@style/Theme.AccountBooks"
         tools:targetApi="31">
 
-        <activity
-            android:name=".TransactionAdapter"
-            android:exported="false" />
 
-        <!-- MainActivity를 기본 액티비티로 설정 -->
+        <!-- 기본 액티비티 설정 -->
+        <!-- android:name=".( 파일 선택 ) -->
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -25,8 +23,12 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity> <!-- 기본 액티비티 설정 끝 -->
+        </activity>
+        <!-- 기본 액티비티 설정 끝 -->
 
+
+        <!-- 기본 액티비티 바꾸면 여기도 바꿔야 함!! -->
+        <!-- android:name=".(파일 선택) -->
         <activity
             android:name=".Budget"
             android:exported="true" />
