@@ -1,24 +1,17 @@
 pluginManagement {
     repositories {
-        google {
-            content {
-                includeGroupByRegex("com\\.android.*")
-                includeGroupByRegex("com\\.google.*")
-                includeGroupByRegex("androidx.*")
-            }
-        }
-        mavenCentral()
+        google() // Google 저장소 추가
+        mavenCentral() // Maven Central 저장소 추가
         gradlePluginPortal()
     }
 }
+
 dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
-        google()
-        mavenCentral()
+        google() // Google 저장소 추가
+        mavenCentral() // Maven Central 저장소 추가
     }
 }
 
-rootProject.name = "AccountBooks"
+rootProject.name = "SharedBudget"
 include(":app")
- 

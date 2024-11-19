@@ -1,0 +1,67 @@
+{
+  "project_info": {
+    "project_number": "463944957596",
+    "project_id": "mylogin-7d8ae",
+    "storage_bucket": "mylogin-7d8ae.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:463944957596:android:335c5ff0b8b175c2f3b759",
+        "android_client_info": {
+          "package_name": "com.example.accountbooks"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAcruXc9GuvExOC6Ik7NZZK9OnmLeG_chw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:463944957596:android:67619262f2a43985f3b759",
+        "android_client_info": {
+          "package_name": "com.example.altteulaccountbook"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAcruXc9GuvExOC6Ik7NZZK9OnmLeG_chw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:463944957596:android:55137034d9031ca2f3b759",
+        "android_client_info": {
+          "package_name": "com.example.sharedbudget"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAcruXc9GuvExOC6Ik7NZZK9OnmLeG_chw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

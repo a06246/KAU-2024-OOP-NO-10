@@ -12,31 +12,30 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AccountBooks"
         tools:targetApi="31">
-
-
-        <!-- 기본 액티비티 설정 -->
+        <activity
+            android:name=".SharedBudgetActivity"
+            android:exported="false" />
+        <activity
+            android:name=".RegisterActivity"
+            android:exported="false" /> <!-- 기본 액티비티 설정 -->
         <!-- android:name=".( 파일 선택 ) -->
         <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <!-- 기본 액티비티 설정 끝 -->
-
-
+        </activity> <!-- 기본 액티비티 설정 끝 -->
         <!-- 기본 액티비티 바꾸면 여기도 바꿔야 함!! -->
         <!-- android:name=".(파일 선택) -->
         <activity
             android:name=".Budget"
             android:exported="true" />
-
         <activity
             android:name=".Calendar"
             android:exported="false" />
-
     </application>
 
 </manifest>
