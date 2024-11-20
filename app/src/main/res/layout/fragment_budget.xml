@@ -52,6 +52,15 @@
                 android:layout_height="wrap_content"
                 android:text="직접 입력"
                 android:layout_gravity="start" />
+
+            <!-- 친구 목록 버튼 -->
+            <Button
+                android:id="@+id/btnFriendList"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="친구 목록"
+                android:layout_gravity="start"
+                android:layout_marginStart="16dp" />
         </LinearLayout>
 
         <!-- 이름 입력 필드 컨테이너 -->
