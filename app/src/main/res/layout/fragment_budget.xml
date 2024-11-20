@@ -2,13 +2,13 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemasandroid.com/tools"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Budget">
 
-    <!-- 고정된 상단 영역 -->
+    <!-- 상단 고정 영역 -->
     <LinearLayout
         android:id="@+id/topContainer"
         android:layout_width="match_parent"
@@ -22,47 +22,36 @@
             android:id="@+id/textBudget"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="공유 가계부"
-            android:textSize="24sp"
-            android:textStyle="bold"
             android:gravity="center"
-            android:layout_gravity="center_horizontal" />
+            android:layout_gravity="center_horizontal"
+            android:text="공유 가계부(개인 단체)"
+            android:textSize="24sp"
+            android:textStyle="bold" />
 
-        <!-- 안내 텍스트 -->
+        <!-- 인원 추가 텍스트 -->
         <TextView
             android:id="@+id/selectNum"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="가계부에 추가할 인원을 선택하세요"
-            android:textSize="16sp"
             android:layout_marginTop="8dp"
-            android:gravity="center"
-            android:layout_gravity="center_horizontal" />
+            android:text="인원 추가하기"
+            android:textSize="16sp" />
 
-        <!-- 스피너와 버튼 영역 -->
+        <!-- 버튼 컨테이너 -->
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:gravity="center"
-            android:layout_gravity="center_horizontal"
+            android:gravity="start"
             android:layout_marginTop="8dp">
 
-            <!-- 인원 선택 스피너 -->
-            <Spinner
-                android:id="@+id/spinner"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:entries="@array/인원"
-                android:minHeight="48dp" />
-
-            <!-- 입력 완료 버튼 -->
+            <!-- 직접 입력 버튼 -->
             <Button
                 android:id="@+id/btnSubmit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="입력 완료"
-                android:layout_marginStart="8dp" />
+                android:text="직접 입력"
+                android:layout_gravity="start" />
         </LinearLayout>
 
         <!-- 이름 입력 필드 컨테이너 -->
@@ -72,9 +61,8 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center"
-            android:layout_gravity="center_horizontal"
             android:layout_marginTop="16dp">
-            <!-- 선택된 인원 수에 따라 이름 입력 필드가 추가됩니다 -->
+            <!-- 동적으로 추가될 이름 필드 -->
         </LinearLayout>
 
         <!-- 구분선 -->
@@ -85,475 +73,21 @@
             android:layout_marginTop="8dp" />
     </LinearLayout>
 
-    <!-- 스크롤 가능한 하단 영역 -->
+    <!-- 하단 스크롤 영역 -->
     <ScrollView
         android:id="@+id/scrollViewContainer"
         android:layout_width="match_parent"
-        android:visibility="gone"
         android:layout_height="0dp"
+        android:visibility="gone"
+        android:padding="16dp"
         app:layout_constraintTop_toBottomOf="@id/topContainer"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:padding="16dp">
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-
-            <!-- 첫 번째 날짜별 항목 -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginBottom="16dp"
-                android:gravity="start">
-
-                <!-- 날짜 텍스트 -->
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="10월 23일 수요일"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-
-                <!-- 금액 텍스트 -->
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="-27,000 원"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:textColor="#000000" />
-            </LinearLayout>
-
-            <!-- 첫 번째 항목 세부 정보 -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:layout_marginBottom="8dp">
-
-                <!-- 아이콘 -->
-                <View
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:background="@drawable/circle_icon"
-                    android:backgroundTint="#3F51B5" />
-
-                <!-- 내용 텍스트 -->
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:text="-27,000 원 블루포트 | heelo 카드" />
-            </LinearLayout>
-
-            <!-- 구분선 -->
-            <!-- 구분선 -->
-            <!-- 구분선 -->
-            <!-- 구분선 -->
-            <!-- 구분선 -->
-            <!-- 구분선 -->
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#CCCCCC"
-                android:layout_marginVertical="16dp" />
-
-            <!-- 두 번째 날짜별 항목 -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginBottom="16dp"
-                android:gravity="start">
-
-                <!-- 날짜 텍스트 -->
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="10월 24일 목요일"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-
-                <!-- 금액 텍스트 -->
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="-15,000 원"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:textColor="#000000" />
-            </LinearLayout>
-
-            <!-- 두 번째 항목 세부 정보 -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:layout_marginBottom="8dp">
-
-                <!-- 아이콘 -->
-                <View
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:background="@drawable/circle_icon"
-                    android:backgroundTint="#3F51B5" />
-
-                <!-- 내용 텍스트 -->
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:text="-15,000 원 스타벅스 | 카드 결제" />
-            </LinearLayout>
-
-            <!-- 두 번째 항목과 날짜 구분선 -->
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#CCCCCC"
-                android:layout_marginVertical="16dp" />
-
-            <!-- 다른 날의 항목 반복 -->
-            <!-- 필요에 따라 항목 추가 -->
-            <!-- 세 번째 날짜별 항목 -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginBottom="16dp"
-                android:gravity="start">
-
-                <!-- 날짜 텍스트 -->
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="10월 25일 금요일"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-
-                <!-- 금액 텍스트 -->
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="-5,000 원"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:textColor="#000000" />
-            </LinearLayout>
-
-            <!-- 세 번째 항목 세부 정보 -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:layout_marginBottom="8dp">
-
-                <!-- 아이콘 -->
-                <View
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:background="@drawable/circle_icon"
-                    android:backgroundTint="#3F51B5" />
-
-                <!-- 내용 텍스트 -->
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:text="-5,000 원 편의점 | 현금" />
-            </LinearLayout>
-
-            <!-- 세 번째 항목과 날짜 구분선 -->
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#CCCCCC"
-                android:layout_marginVertical="16dp" />
-
-            <!-- 네 번째 날짜별 항목 -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginBottom="16dp"
-                android:gravity="start">
-
-                <!-- 날짜 텍스트 -->
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="10월 26일 토요일"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-
-                <!-- 금액 텍스트 -->
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="-12,000 원"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:textColor="#000000" />
-            </LinearLayout>
-
-            <!-- 네 번째 항목 세부 정보 -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:layout_marginBottom="8dp">
-
-                <!-- 아이콘 -->
-                <View
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:background="@drawable/circle_icon"
-                    android:backgroundTint="#3F51B5" />
-
-                <!-- 내용 텍스트 -->
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:text="-12,000 원 카페 | 카드 결제" />
-            </LinearLayout>
-
-            <!-- 네 번째 항목과 날짜 구분선 -->
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#CCCCCC"
-                android:layout_marginVertical="16dp" />
-
-            <!-- 다섯 번째 날짜별 항목 -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginBottom="16dp"
-                android:gravity="start">
-
-                <!-- 날짜 텍스트 -->
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="10월 27일 일요일"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-
-                <!-- 금액 텍스트 -->
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="-50,000 원"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:textColor="#000000" />
-            </LinearLayout>
-
-            <!-- 다섯 번째 항목 세부 정보 -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:layout_marginBottom="8dp">
-
-                <!-- 아이콘 -->
-                <View
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:background="@drawable/circle_icon"
-                    android:backgroundTint="#3F51B5" />
-
-                <!-- 내용 텍스트 -->
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:text="-50,000 원 마트 | 현금 결제" />
-            </LinearLayout>
-
-            <!-- 다섯 번째 항목과 날짜 구분선 -->
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#CCCCCC"
-                android:layout_marginVertical="16dp" />
-            <!-- 여섯 번째 날짜별 항목 -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginBottom="16dp"
-                android:gravity="start">
-
-                <!-- 날짜 텍스트 -->
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="10월 28일 월요일"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-
-                <!-- 금액 텍스트 -->
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="-10,000 원"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:textColor="#000000" />
-            </LinearLayout>
-
-            <!-- 여섯 번째 항목 세부 정보 -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:layout_marginBottom="8dp">
-
-                <!-- 아이콘 -->
-                <View
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:background="@drawable/circle_icon"
-                    android:backgroundTint="#3F51B5" />
-
-                <!-- 내용 텍스트 -->
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:text="-10,000 원 서점 | 카드 결제" />
-            </LinearLayout>
-
-            <!-- 여섯 번째 항목과 날짜 구분선 -->
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#CCCCCC"
-                android:layout_marginVertical="16dp" />
-
-            <!-- 일곱 번째 날짜별 항목 -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginBottom="16dp"
-                android:gravity="start">
-
-                <!-- 날짜 텍스트 -->
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="10월 29일 화요일"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-
-                <!-- 금액 텍스트 -->
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="-8,000 원"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:textColor="#000000" />
-            </LinearLayout>
-
-            <!-- 일곱 번째 항목 세부 정보 -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:layout_marginBottom="8dp">
-
-                <!-- 아이콘 -->
-                <View
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:background="@drawable/circle_icon"
-                    android:backgroundTint="#3F51B5" />
-
-                <!-- 내용 텍스트 -->
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:text="-8,000 원 영화관 | 카드 결제" />
-            </LinearLayout>
-
-            <!-- 일곱 번째 항목과 날짜 구분선 -->
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#CCCCCC"
-                android:layout_marginVertical="16dp" />
-
-            <!-- 여덟 번째 날짜별 항목 -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginBottom="16dp"
-                android:gravity="start">
-
-                <!-- 날짜 텍스트 -->
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="10월 30일 수요일"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-
-                <!-- 금액 텍스트 -->
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="-20,000 원"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:textColor="#000000" />
-            </LinearLayout>
-
-            <!-- 여덟 번째 항목 세부 정보 -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:layout_marginBottom="8dp">
-
-                <!-- 아이콘 -->
-                <View
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:background="@drawable/circle_icon"
-                    android:backgroundTint="#3F51B5" />
-
-                <!-- 내용 텍스트 -->
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:text="-20,000 원 헬스장 | 현금 결제" />
-            </LinearLayout>
-
-            <!-- 여덟 번째 항목과 날짜 구분선 -->
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#CCCCCC"
-                android:layout_marginVertical="16dp" />
-
+            <!-- 추가될 동적 내용 -->
         </LinearLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

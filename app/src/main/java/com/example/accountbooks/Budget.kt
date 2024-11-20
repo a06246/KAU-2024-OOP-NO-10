@@ -1,68 +1,100 @@
 package com.example.accountbooks
 
+import android.graphics.Color
+import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
-import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 
 class Budget : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.fragment_budget)
 
-        // 시스템 창 삽입 설정
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
-
-        // 뷰 초기화
-        val spinner = findViewById<Spinner>(R.id.spinner)
-        val inputContainer = findViewById<LinearLayout>(R.id.nameContainer)
+        val nameContainer = findViewById<LinearLayout>(R.id.nameContainer)
         val submitButton = findViewById<Button>(R.id.btnSubmit)
-        val scrollViewContainer = findViewById<ScrollView>(R.id.scrollViewContainer)
 
-        // Spinner에서 선택된 인원 수에 따라 입력 필드 생성
-        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
-                val selectedPeople = position + 1 // 1인, 2인, 3인에 대응
+        // 직접 입력 버튼 클릭 이벤트
+        submitButton.setOnClickListener {
+            // 최대 4개까지만 추가 가능
+            if (nameContainer.childCount >= 4) { // 아이콘 4개까지만 허용
+                Toast.makeText(this, "최대 4명까지만 추가 가능합니다.", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
 
-                // 기존 입력 필드 제거
-                inputContainer.removeAllViews()
-
-                // 선택된 인원 수만큼 입력 필드 추가
-                for (i in 1..selectedPeople) {
-                    val editText = EditText(this@Budget).apply {
-                        hint = "이름 $i"
-                        layoutParams = LinearLayout.LayoutParams(
-                            0,
-                            LinearLayout.LayoutParams.WRAP_CONTENT,
-                            1f
-                        ).apply {
-                            setMargins(16, 8, 8, 8)
-                        }
-                    }
-                    inputContainer.addView(editText)
+            // 이름 입력 필드 생성
+            val editText = EditText(this).apply {
+                hint = "이름 입력"
+                layoutParams = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+                ).apply {
+                    setMargins(16, 8, 16, 8)
                 }
-
-                // 입력 완료 버튼을 보이도록 설정
-                submitButton.visibility = View.VISIBLE
             }
 
-            override fun onNothingSelected(parent: AdapterView<*>) {
-                // 아무것도 선택되지 않은 경우 (필요 시 구현)
+            // 확인 버튼 생성
+            val confirmButton = Button(this).apply {
+                text = "확인"
+                layoutParams = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+                ).apply {
+                    setMargins(16, 8, 16, 8)
+                }
+                setOnClickListener {
+                    val name = editText.text.toString()
+                    if (name.isNotBlank()) {
+                        // 이름이 입력되었을 경우 아이콘 추가
+                        addNameBubble(name, nameContainer)
+                        nameContainer.removeView(editText) // 입력 필드 제거
+                        nameContainer.removeView(this)   // 확인 버튼 제거
+
+                        // 추가 완료 후 4개가 꽉 찼으면 버튼 비활성화
+                        if (nameContainer.childCount >= 4) {
+                            submitButton.isEnabled = false
+                            Toast.makeText(this@Budget, "모든 이름을 추가했습니다.", Toast.LENGTH_SHORT).show()
+                        }
+                    } else {
+                        Toast.makeText(this@Budget, "이름을 입력해주세요.", Toast.LENGTH_SHORT).show()
+                    }
+                }
             }
+
+            // 이름 입력 필드와 확인 버튼 추가
+            nameContainer.addView(editText)
+            nameContainer.addView(confirmButton)
+        }
+    }
+
+    private fun addNameBubble(name: String, container: LinearLayout) {
+        // 동그란 이름 아이콘 생성
+        val bubble = TextView(this).apply {
+            text = name
+            setPadding(24, 12, 24, 12)
+            setTextColor(Color.BLACK)
+            textSize = 14f
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            ).apply {
+                setMargins(16, 8, 16, 8)
+            }
+            background = createBubbleBackground(container.childCount) // 순서를 기반으로 색상 설정
         }
 
-        // 입력 완료 버튼 클릭 리스너
-        submitButton.setOnClickListener {
-            Toast.makeText(this, "입력이 완료되었습니다.", Toast.LENGTH_SHORT).show()
-            // 입력 완료 버튼을 사라지게 설정
-            submitButton.visibility = View.GONE
-            scrollViewContainer.visibility = View.VISIBLE // 스크롤 뷰를 보이도록 설정
+        container.addView(bubble)
+    }
+
+    // 동적으로 배경 색상을 설정하는 함수
+    private fun createBubbleBackground(index: Int): GradientDrawable {
+        val colors = listOf("#FFEB3B", "#FF5722", "#4CAF50", "#03A9F4") // 노랑, 주황, 초록, 파랑
+        val color = Color.parseColor(colors[index % colors.size])
+
+        return GradientDrawable().apply {
+            shape = GradientDrawable.RECTANGLE
+            cornerRadius = 50f // 둥근 모서리
+            setColor(color) // 배경색 설정
         }
     }
 }

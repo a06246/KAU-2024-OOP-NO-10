@@ -21,7 +21,7 @@
         <!-- 기본 액티비티 설정 -->
         <!-- android:name=".( 파일 선택 ) -->
         <activity
-            android:name=".MainActivity"
+            android:name=".Budget"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -32,7 +32,7 @@
         <!-- 기본 액티비티 바꾸면 여기도 바꿔야 함!! -->
         <!-- android:name=".(파일 선택) -->
         <activity
-            android:name=".Budget"
+            android:name=".MainActivity"
             android:exported="true" />
         <activity
             android:name=".Calendar"
