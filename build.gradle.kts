@@ -6,7 +6,7 @@ plugins {
 
 buildscript {
     dependencies {
-        classpath("com.android.tools.build:gradle:8.0.0") // Gradle 플러그인 버전
+        classpath("com.android.tools.build:gradle:8.7.2") // Gradle 플러그인 버전
         classpath("com.google.gms:google-services:4.3.15") // Google 서비스 클래스패스 추가
     }
 }
