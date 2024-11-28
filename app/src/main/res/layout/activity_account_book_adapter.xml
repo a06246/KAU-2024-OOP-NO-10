@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
@@ -6,10 +5,12 @@
     android:orientation="vertical"
     android:padding="16dp">
 
+    <!-- 가계부 이름을 표시할 텍스트뷰 -->
     <TextView
         android:id="@+id/tvAccountBookName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="가계부 이름"
-        android:textSize="18sp"/>
+        android:textSize="18sp"
+        android:layout_marginBottom="8dp" />
 </LinearLayout>

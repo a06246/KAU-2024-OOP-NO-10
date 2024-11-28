@@ -10,7 +10,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.accountbooks.R
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -34,6 +33,15 @@ class SharedBudgetActivity : AppCompatActivity() {
         val loginButton: Button = findViewById(R.id.btnLogin)
         val registerButton: Button = findViewById(R.id.btnSignup)
 
+        // 소비지출내역, 내역추가, 자산 버튼 설정 (로그인 전에는 숨김)
+        val expenseHistoryButton: Button = findViewById(R.id.btnExpenseHistory)
+        val addTransactionButton: Button = findViewById(R.id.btnAddTransaction)
+        val assetsButton: Button = findViewById(R.id.btnAssets)
+
+        expenseHistoryButton.visibility = View.GONE
+        addTransactionButton.visibility = View.GONE
+        assetsButton.visibility = View.GONE
+
         // 로그인 버튼 클릭 리스너
         loginButton.setOnClickListener {
             loginUser()
@@ -45,26 +53,45 @@ class SharedBudgetActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        // 소비지출내역, 내역추가, 자산 버튼 클릭 리스너 설정
+        expenseHistoryButton.setOnClickListener {
+            Toast.makeText(this, "소비지출내역 버튼 클릭됨", Toast.LENGTH_SHORT).show()
+            // TODO: 소비지출내역 화면으로 이동 코드 추가
+        }
+
+        addTransactionButton.setOnClickListener {
+            Toast.makeText(this, "내역추가 버튼 클릭됨", Toast.LENGTH_SHORT).show()
+            // TODO: 내역추가 화면으로 이동 코드 추가
+        }
+
+        assetsButton.setOnClickListener {
+            Toast.makeText(this, "자산 버튼 클릭됨", Toast.LENGTH_SHORT).show()
+            // TODO: 자산 화면으로 이동 코드 추가
+        }
+
         // RecyclerView 설정
         val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
         // 어댑터 설정
         accountBookAdapter = AccountBookAdapter(accountBookList) { accountBookName ->
-            // 가계부 항목 클릭 시 상세 화면으로 이동 (현재 구현되지 않음)
-            // val intent = Intent(this, AccountBookDetailActivity::class.java)
-            // intent.putExtra("ACCOUNT_BOOK_NAME", accountBookName)
-            // startActivity(intent)
-
-            // 대신 간단히 토스트 메시지를 출력하여 클릭 이벤트가 잘 작동하는지 확인합니다.
             Toast.makeText(this, "$accountBookName 선택됨", Toast.LENGTH_SHORT).show()
         }
         recyclerView.adapter = accountBookAdapter
 
         // FloatingActionButton 클릭 리스너 (새로운 가계부 추가)
         val fab: FloatingActionButton = findViewById(R.id.fab)
+        fab.visibility = View.GONE
         fab.setOnClickListener {
             showAddAccountBookDialog()
+        }
+
+        // 친구관리화면으로 넘어가기 (로그인 전에는 숨김)
+        val friendManagementButton: Button = findViewById(R.id.btnFriendManagement)
+        friendManagementButton.visibility = View.GONE
+        friendManagementButton.setOnClickListener {
+            val intent = Intent(this, FriendsActivity::class.java)
+            startActivity(intent)
         }
     }
 
@@ -82,13 +109,10 @@ class SharedBudgetActivity : AppCompatActivity() {
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
-                    // 로그인 성공 시
                     Toast.makeText(this, "로그인 성공", Toast.LENGTH_SHORT).show()
-                    // 로그인 후 가계부 UI 표시 및 가계부 데이터 로드
                     showAccountBookUI()
                     loadAccountBooks()
                 } else {
-                    // 로그인 실패 시
                     Toast.makeText(this, "로그인 실패: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
                 }
             }
@@ -96,9 +120,18 @@ class SharedBudgetActivity : AppCompatActivity() {
 
     // 로그인 후 가계부 UI 표시
     private fun showAccountBookUI() {
-        // 로그인 후 UI 변경 작업 (로그인 화면을 숨기거나 가계부 UI를 표시하는 작업)
         findViewById<RecyclerView>(R.id.recyclerView).visibility = View.VISIBLE
         findViewById<FloatingActionButton>(R.id.fab).visibility = View.VISIBLE
+
+        // 로그인 후 로그인 관련 UI를 숨기고 친구 관리 버튼 및 소비지출/내역추가/자산 버튼을 보이게 설정
+        findViewById<Button>(R.id.btnLogin).visibility = View.GONE
+        findViewById<Button>(R.id.btnSignup).visibility = View.GONE
+        findViewById<EditText>(R.id.etId).visibility = View.GONE
+        findViewById<EditText>(R.id.etPassword).visibility = View.GONE
+        findViewById<Button>(R.id.btnFriendManagement).visibility = View.VISIBLE
+        findViewById<Button>(R.id.btnExpenseHistory).visibility = View.VISIBLE
+        findViewById<Button>(R.id.btnAddTransaction).visibility = View.VISIBLE
+        findViewById<Button>(R.id.btnAssets).visibility = View.VISIBLE
     }
 
     // Firestore에서 가계부 목록 불러오기
@@ -147,12 +180,10 @@ class SharedBudgetActivity : AppCompatActivity() {
         val builder = AlertDialog.Builder(this)
         builder.setTitle("새 가계부 추가")
 
-        // 입력 필드 생성
         val input = EditText(this)
         input.hint = "가계부 이름 입력"
         builder.setView(input)
 
-        // 확인 버튼 클릭 리스너
         builder.setPositiveButton("추가") { dialog, _ ->
             val newAccountBookName = input.text.toString()
             if (newAccountBookName.isNotEmpty()) {
@@ -163,7 +194,6 @@ class SharedBudgetActivity : AppCompatActivity() {
             dialog.dismiss()
         }
 
-        // 취소 버튼 클릭 리스너
         builder.setNegativeButton("취소") { dialog, _ ->
             dialog.cancel()
         }
