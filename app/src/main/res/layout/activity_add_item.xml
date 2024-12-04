@@ -1,179 +1,67 @@
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp">
+    android:orientation="vertical">
 
-    <RelativeLayout
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar" />
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <LinearLayout
-            android:id="@+id/header"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_alignParentTop="true"
-            android:layout_marginBottom="16dp">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="소비/지출 내역 추가하기"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-        </LinearLayout>
-
-        <EditText
-            android:id="@+id/et_price"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/header"
-            android:hint="금액 입력" />
-
-        <!-- 분류 라벨 추가 -->
-        <TextView
-            android:id="@+id/tv_category_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/et_price"
-            android:layout_marginTop="16dp"
-            android:text="분류"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="16dp">
 
         <RadioGroup
-            android:id="@+id/rg_payment_method"
+            android:id="@+id/radioGroupType"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/tv_category_label"
-            android:layout_marginTop="8dp">
+            android:orientation="horizontal">
 
             <RadioButton
-                android:id="@+id/rb_card"
+                android:id="@+id/radioIncome"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="수입" />
 
             <RadioButton
-                android:id="@+id/rb_account"
+                android:id="@+id/radioExpense"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:checked="true"
                 android:text="지출" />
-
-            <RadioButton
-                android:id="@+id/rb_cash"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="이체" />
         </RadioGroup>
 
-        <!-- 카테고리 -->
-        <TextView
-            android:id="@+id/tv_spinner_category_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/rg_payment_method"
-            android:layout_marginTop="16dp"
-            android:text="카테고리"
-            android:textSize="16sp"
-            android:textStyle="bold" />
-
-        <Spinner
-            android:id="@+id/spinner_category"
+        <EditText
+            android:id="@+id/etAmount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/tv_spinner_category_label"
-            android:layout_marginTop="8dp" />
-
-        <!-- 결제수단 -->
-        <TextView
-            android:id="@+id/tv_spinner_payment_method_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/spinner_category"
             android:layout_marginTop="16dp"
-            android:text="결제수단"
-            android:textSize="16sp"
-            android:textStyle="bold" />
+            android:hint="금액"
+            android:inputType="numberDecimal" />
 
         <Spinner
-            android:id="@+id/spinner_payment_method"
+            android:id="@+id/spinnerCategory"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/tv_spinner_payment_method_label"
-            android:layout_marginTop="8dp" />
-
-        <!-- 가계부 종류 -->
-        <TextView
-            android:id="@+id/tv_spinner_ledger_type_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/spinner_payment_method"
-            android:layout_marginTop="16dp"
-            android:text="가계부 종류"
-            android:textSize="16sp"
-            android:textStyle="bold" />
-
-        <Spinner
-            android:id="@+id/spinner_ledger_type"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/tv_spinner_ledger_type_label"
-            android:layout_marginTop="8dp" />
-
-        <TextView
-            android:id="@+id/tv_date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/spinner_ledger_type"
-            android:layout_marginTop="16dp"
-            android:text="날짜"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/tv_date_value"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/tv_date"
-            android:layout_marginTop="8dp"
-            android:text="2023년 5월 1일" />
+            android:layout_marginTop="16dp" />
 
         <EditText
-            android:id="@+id/et_memo"
+            android:id="@+id/etMemo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/tv_date_value"
             android:layout_marginTop="16dp"
-            android:hint="메모 입력" />
-
-        <TextView
-            android:id="@+id/tv_transaction"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/et_memo"
-            android:layout_marginTop="16dp"
-            android:text="거래처"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/tv_transaction_value"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/tv_transaction"
-            android:layout_marginTop="8dp"
-            android:text="카페 OO" />
+            android:hint="메모"
+            android:inputType="text" />
 
         <Button
-            android:id="@+id/btn_save"
+            android:id="@+id/btnSave"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/tv_transaction_value"
-            android:layout_marginTop="16dp"
-            android:text="저장"
-            android:textColor="@android:color/white" />
-    </RelativeLayout>
-</ScrollView>
+            android:layout_marginTop="24dp"
+            android:text="저장" />
+
+    </LinearLayout>
+</LinearLayout>
