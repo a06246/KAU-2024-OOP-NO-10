@@ -1,39 +1,33 @@
-package com.example.sharedbudget
+package com.example.accountbooks
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
-import com.example.accountbooks.R
+//import com.example.accountbooks.R
+
 
 class FriendAdapter(
-    private val friendList: MutableList<String>,
-    private val clickListener: (String) -> Unit
-) : RecyclerView.Adapter<FriendAdapter.FriendViewHolder>() {
+    private val friendList: List<String>,
+    private val onItemClick: (String) -> Unit
+) : RecyclerView.Adapter<FriendAdapter.ViewHolder>() {
 
-    inner class FriendViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val friendNameTextView: TextView = itemView.findViewById(R.id.tvFriendName)
-
-        fun bind(friendName: String) {
-            friendNameTextView.text = friendName
-            itemView.setOnClickListener {
-                clickListener(friendName)
-                Toast.makeText(itemView.context, "$friendName 선택됨", Toast.LENGTH_SHORT).show()
-            }
-        }
+    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val textView: TextView = view.findViewById(R.id.textView)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FriendViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_friend, parent, false)
-        return FriendViewHolder(view)
+        return ViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: FriendViewHolder, position: Int) {
-        holder.bind(friendList[position])
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val friend = friendList[position]
+        holder.textView.text = friend
+        holder.itemView.setOnClickListener { onItemClick(friend) }
     }
 
-    override fun getItemCount(): Int = friendList.size
+    override fun getItemCount() = friendList.size
 }
