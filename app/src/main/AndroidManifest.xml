@@ -12,42 +12,41 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AccountBooks"
         tools:targetApi="31">
-        <activity
-            android:name="com.example.accountbooks.FriendsActivity"
-            android:exported="false" />
+
+        <!-- 친구 관리 화면 -->
         <activity
             android:name=".FriendsActivity"
             android:exported="false" />
-        <activity
-            android:name=".AddItem"
-            android:exported="false" />
-        <activity
-            android:name=".Calendar"
-            android:exported="false" />
+
+        <!-- 항목 추가 화면 -->
         <activity
             android:name=".AddItemActivity"
             android:exported="false" />
+
+        <!-- 캘린더 화면 -->
         <activity
-            android:name=".SharedBudgetActivity"
+            android:name=".Calendar"
             android:exported="false" />
-        <activity
-            android:name=".RegisterActivity"
-            android:exported="false" /> <!-- 기본 액티비티 설정 -->
-        <!-- android:name=".( 파일 선택 ) -->
+
+        <!-- 가계부 화면 -->
         <activity
             android:name=".Budget"
+            android:exported="false" />
+
+        <!-- 회원가입 화면 -->
+        <activity
+            android:name=".RegisterActivity"
+            android:exported="false" />
+
+        <!-- SharedBudgetActivity를 기본 액티비티로 설정 -->
+        <activity
+            android:name=".SharedBudgetActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity> <!-- 기본 액티비티 설정 끝 -->
-        <!-- 기본 액티비티 바꾸면 여기도 바꿔야 함!! -->
-        <!-- android:name=".(파일 선택) -->
-        <activity
-            android:name=".MainActivity"
-            android:exported="true" />
-    </application>
+        </activity>
 
+    </application>
 </manifest>

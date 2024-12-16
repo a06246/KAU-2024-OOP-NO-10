@@ -7,7 +7,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 
-class AccountBookAdapter(
+class  AccountBookAdapter(
     private val accountBookList: MutableList<String>, // 가계부 목록을 저장하는 리스트
     private val clickListener: (String) -> Unit // 각 항목이 클릭되었을 때 실행될 함수
 ) : RecyclerView.Adapter<AccountBookAdapter.AccountBookViewHolder>() { // 리사이클뷰 위임받은 어댑터

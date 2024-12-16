@@ -16,7 +16,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 
 class SharedBudgetActivity : AppCompatActivity() {
 
-    private lateinit var auth: FirebaseAuth // Firebase 인증 객체
+    private lateinit var auth: FirebaseAuth // Firebase Authentication 객체
     private lateinit var firestore: FirebaseFirestore // Firestore 객체
     private val accountBookList = mutableListOf<String>()
     private lateinit var accountBookAdapter: AccountBookAdapter
@@ -25,7 +25,7 @@ class SharedBudgetActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_shared_budget)
 
-        // Firebase 인증 객체와 Firestore 인스턴스 가져오기
+        // Firebase 초기화
         auth = FirebaseAuth.getInstance()
         firestore = FirebaseFirestore.getInstance()
 
@@ -95,35 +95,33 @@ class SharedBudgetActivity : AppCompatActivity() {
         }
     }
 
-    // 로그인 처리
+    // 로그인 처리 (Firebase Authentication)
     private fun loginUser() {
-        val email = findViewById<EditText>(R.id.etId).text.toString()
-        val password = findViewById<EditText>(R.id.etPassword).text.toString()
+        val email = findViewById<EditText>(R.id.etId).text.toString().trim()
+        val password = findViewById<EditText>(R.id.etPassword).text.toString().trim()
 
         if (email.isEmpty() || password.isEmpty()) {
             Toast.makeText(this, "이메일과 비밀번호를 입력해주세요.", Toast.LENGTH_SHORT).show()
             return
         }
 
-        // Firebase를 사용해 로그인 처리
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     Toast.makeText(this, "로그인 성공", Toast.LENGTH_SHORT).show()
                     showAccountBookUI()
-                    loadAccountBooks()
+                    loadAccountBooks() // Firestore에서 가계부 목록 불러오기
                 } else {
                     Toast.makeText(this, "로그인 실패: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
                 }
             }
     }
 
-    // 로그인 후 가계부 UI 표시
+    // 로그인 후 UI 표시
     private fun showAccountBookUI() {
         findViewById<RecyclerView>(R.id.recyclerView).visibility = View.VISIBLE
         findViewById<FloatingActionButton>(R.id.fab).visibility = View.VISIBLE
 
-        // 로그인 후 로그인 관련 UI를 숨기고 친구 관리 버튼 및 소비지출/내역추가/자산 버튼을 보이게 설정
         findViewById<Button>(R.id.btnLogin).visibility = View.GONE
         findViewById<Button>(R.id.btnSignup).visibility = View.GONE
         findViewById<EditText>(R.id.etId).visibility = View.GONE

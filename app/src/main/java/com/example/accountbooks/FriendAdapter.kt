@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
-import com.example.sharedbudget.R
+import com.example.accountbooks.R
 
 class FriendAdapter(
     private val friendList: MutableList<String>,
