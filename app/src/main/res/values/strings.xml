@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">AccountBooks</string>
+
+    <!-- 카테고리 배열 -->
+    <string-array name="categories">
+        <item>식비</item>
+        <item>교통비</item>
+        <item>문화/여가</item>
+        <item>의료/건강</item>
+        <item>기타</item>
+    </string-array>
+
+    <!-- 결제수단 배열 -->
+    <string-array name="payment_methods">
+        <item>현금</item>
+        <item>카드</item>
+        <item>계좌이체</item>
+    </string-array>
+
+    <!-- 가계부 종류 배열 -->
+    <string-array name="ledger_types">
+        <item>월별 정산</item>
+        <item>주별 정산</item>
+        <item>특정 프로젝트</item>
+    </string-array>
+</resources>
+

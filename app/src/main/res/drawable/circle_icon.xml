@@ -1,0 +1,7 @@
+<!-- res/drawable/circle_icon.xml -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="#3F51B5" />
+    <size android:width="16dp" android:height="16dp" />
+    <corners android:radius="8dp" />
+    <!-- 동그라미를 위해 반지름을 절반 크기로 설정 -->
+</shape>

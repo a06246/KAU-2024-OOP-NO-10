@@ -1,0 +1,169 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="#F5F5F5">
+
+    <!-- Title -->
+    <TextView
+        android:id="@+id/tv_month"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="2024-12 예산"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_gravity="center_horizontal"
+        android:paddingBottom="16dp"/>
+
+    <!-- Chart Layout -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:weightSum="3">
+
+        <!-- Pie Chart for Total Budget -->
+        <com.github.mikephil.charting.charts.PieChart
+            android:id="@+id/pie_chart_total"
+            android:layout_width="0dp"
+            android:layout_height="200dp"
+            android:layout_weight="1"/>
+
+        <!-- Pie Chart for Variable Budget -->
+        <com.github.mikephil.charting.charts.PieChart
+            android:id="@+id/pie_chart_variable"
+            android:layout_width="0dp"
+            android:layout_height="200dp"
+            android:layout_weight="1"/>
+
+        <!-- Pie Chart for Fixed Budget -->
+        <com.github.mikephil.charting.charts.PieChart
+            android:id="@+id/pie_chart_fixed"
+            android:layout_width="0dp"
+            android:layout_height="200dp"
+            android:layout_weight="1"/>
+    </LinearLayout>
+
+    <!-- Table Layout -->
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:stretchColumns="1">
+
+        <!-- Table Header -->
+        <TableRow>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="항목"
+                android:padding="8dp"
+                android:background="#CCCCCC"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="예산"
+                android:padding="8dp"
+                android:background="#CCCCCC"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="비율"
+                android:padding="8dp"
+                android:background="#CCCCCC"
+                android:textStyle="bold"/>
+        </TableRow>
+
+        <!-- Example Rows -->
+        <TableRow>
+            <TextView
+                android:text="식비"
+                android:padding="8dp"/>
+            <TextView
+                android:text="0"
+                android:padding="8dp"/>
+            <TextView
+                android:text="0%"
+                android:padding="8dp"/>
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:text="교통비"
+                android:padding="8dp"/>
+            <TextView
+                android:text="0"
+                android:padding="8dp"/>
+            <TextView
+                android:text="0%"
+                android:padding="8dp"/>
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:text="여가비"
+                android:padding="8dp"/>
+            <TextView
+                android:text="0"
+                android:padding="8dp"/>
+            <TextView
+                android:text="0%"
+                android:padding="8dp"/>
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:text="생활용품"
+                android:padding="8dp"/>
+            <TextView
+                android:text="0"
+                android:padding="8dp"/>
+            <TextView
+                android:text="0%"
+                android:padding="8dp"/>
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:text="의료, 건강"
+                android:padding="8dp"/>
+            <TextView
+                android:text="0"
+                android:padding="8dp"/>
+            <TextView
+                android:text="0%"
+                android:padding="8dp"/>
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:text="세금, 이자"
+                android:padding="8dp"/>
+            <TextView
+                android:text="0"
+                android:padding="8dp"/>
+            <TextView
+                android:text="0%"
+                android:padding="8dp"/>
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:text="기타비용"
+                android:padding="8dp"/>
+            <TextView
+                android:text="0"
+                android:padding="8dp"/>
+            <TextView
+                android:text="0%"
+                android:padding="8dp"/>
+        </TableRow>
+    </TableLayout>
+</LinearLayout>
