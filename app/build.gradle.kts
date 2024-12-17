@@ -64,6 +64,9 @@ dependencies {
     testImplementation(libs.junit) // JUnit 테스트 라이브러리
     androidTestImplementation(libs.androidx.junit) // AndroidX JUnit 테스트 라이브러리
     androidTestImplementation(libs.androidx.espresso.core) // Espresso UI 테스트 라이브러리
+
+    implementation("androidx.recyclerview:recyclerview:1.3.2")
+    implementation("androidx.cardview:cardview:1.0.0")
 }
 
 // 저장소 설정 (추가된 부분)

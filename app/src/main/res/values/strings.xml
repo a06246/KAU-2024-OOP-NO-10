@@ -23,5 +23,7 @@
         <item>주별 정산</item>
         <item>특정 프로젝트</item>
     </string-array>
+
+    <string name="amount_format">총액: %d원</string>
 </resources>
 

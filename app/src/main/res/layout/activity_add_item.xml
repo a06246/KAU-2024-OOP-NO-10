@@ -1,72 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp">
 
-    <!-- 가계부 선택 스피너 -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="가계부 선택"
+        android:layout_marginBottom="4dp"/>
+
     <Spinner
         android:id="@+id/accountBookSpinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp" />
 
-    <!-- 카테고리 선택 스피너 -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="카테고리"
+        android:layout_marginBottom="4dp"/>
+
     <Spinner
-        android:id="@+id/spinnerCategory"
+        android:id="@+id/categorySpinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp" />
 
-    <!-- 금액 입력 -->
-    <EditText
-        android:id="@+id/etAmount"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="금액"
-        android:inputType="number"
-        android:layout_marginBottom="16dp" />
-
-    <!-- 날짜 선택 -->
     <EditText
         android:id="@+id/etDate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="날짜 선택"
+        android:layout_marginTop="16dp"
+        android:hint="날짜"
         android:focusable="false"
-        android:layout_marginBottom="16dp" />
+        android:clickable="true" />
 
-    <!-- 설명 입력 -->
+    <EditText
+        android:id="@+id/etAmount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:hint="금액"
+        android:inputType="numberDecimal" />
+
     <EditText
         android:id="@+id/etDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="설명"
-        android:layout_marginBottom="16dp" />
+        android:layout_marginTop="16dp"
+        android:hint="설명" />
 
-    <!-- 버튼 컨테이너 -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:gravity="center">
+        android:layout_marginTop="24dp">
 
-        <!-- 저장 버튼 -->
-        <Button
-            android:id="@+id/btnSave"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="저장"
-            android:layout_marginEnd="8dp" />
-
-        <!-- 뒤로가기 버튼 -->
         <Button
             android:id="@+id/btnBack"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="뒤로가기" />
+            android:layout_weight="1"
+            android:layout_marginEnd="8dp"
+            android:text="취소" />
+
+        <Button
+            android:id="@+id/btnSave"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="8dp"
+            android:text="저장" />
+
     </LinearLayout>
 
 </LinearLayout>

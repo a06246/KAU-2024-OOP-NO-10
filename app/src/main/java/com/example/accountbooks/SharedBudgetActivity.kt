@@ -14,6 +14,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
+
 class SharedBudgetActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth // Firebase Authentication 객체
@@ -76,6 +77,8 @@ class SharedBudgetActivity : AppCompatActivity() {
         expenseHistoryButton.setOnClickListener {
             Toast.makeText(this, "소비지출내역 버튼 클릭됨", Toast.LENGTH_SHORT).show()
             // TODO: 소비지출내역 화면으로 이동 코드 추가
+            val intent = Intent(this, CalendarActivity::class.java)
+            startActivity(intent)
         }
 
         // 내역추가 버튼 클릭
