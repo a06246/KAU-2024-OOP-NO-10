@@ -152,7 +152,9 @@ class SharedBudgetActivity : AppCompatActivity() {
                 accountBookList.clear()
                 for (document in documents) {
                     val accountBookName = document.getString("name") ?: "이름 없음"
-                    accountBookList.add(accountBookName)
+                    if (accountBookName != "myAccountBook") { // 기본 가계부는 제외
+                        accountBookList.add(accountBookName)
+                    }
                 }
                 accountBookAdapter.notifyDataSetChanged()
             }

@@ -47,6 +47,8 @@ class  AccountBookAdapter(
     // 항목 삭제 메소드
     private fun removeItem(position: Int) {
         if (position >= 0 && position < accountBookList.size) {
+            val accountBookName = accountBookList[position]
+
             accountBookList.removeAt(position)
             notifyItemRemoved(position) // 특정 위치에서 항목이 삭제되었음을 RecyclerView에 알립니다.
             notifyItemRangeChanged(position, accountBookList.size) // 데이터 변경 후 RecyclerView에 알림을 주어 목록을 갱신

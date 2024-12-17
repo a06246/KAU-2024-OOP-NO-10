@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 //import com.example.accountbooks.R
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
 class RegisterActivity : AppCompatActivity() {
 
@@ -46,11 +47,29 @@ class RegisterActivity : AppCompatActivity() {
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
+                    // 회원가입 성공 시 기본 가계부 생성
+                    createDefaultAccountBook(auth.currentUser?.uid ?: return@addOnCompleteListener)
                     Toast.makeText(this, "회원가입 성공", Toast.LENGTH_SHORT).show()
                     navigateToSharedBudgetActivity()
                 } else {
                     Toast.makeText(this, "회원가입 실패: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
                 }
+            }
+    }
+
+    // 기본 가계부 생성
+    private fun createDefaultAccountBook(userId: String) {
+        val firestore = FirebaseFirestore.getInstance()
+        val accountBook = hashMapOf(
+            "name" to "myAccountBook",
+            "userId" to userId,
+            "isDefault" to true
+        )
+
+        firestore.collection("account_books")
+            .add(accountBook)
+            .addOnFailureListener { e ->
+                Toast.makeText(this, "기본 가계부 생성 실패: ${e.message}", Toast.LENGTH_SHORT).show()
             }
     }
 

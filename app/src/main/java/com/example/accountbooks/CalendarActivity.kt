@@ -75,16 +75,16 @@ class CalendarActivity : AppCompatActivity() {
         calendar.set(Calendar.MINUTE, 59)
         calendar.set(Calendar.SECOND, 59)
         val endDate = calendar.time
-        
+
+        // myAccountBook에 해당하는 거래 내역만 직접 가져옵니다
         db.collection("items")
             .whereEqualTo("userId", userId)
             .whereGreaterThanOrEqualTo("date", startDate)
             .whereLessThanOrEqualTo("date", endDate)
             .orderBy("date", Query.Direction.DESCENDING)
-            .orderBy(FieldPath.documentId(), Query.Direction.DESCENDING)
             .get()
-            .addOnSuccessListener { documents ->
-                val newTransactions = documents.mapNotNull { doc ->
+            .addOnSuccessListener { itemDocuments ->
+                val newTransactions = itemDocuments.mapNotNull { doc ->
                     try {
                         Transaction(
                             id = doc.id,
