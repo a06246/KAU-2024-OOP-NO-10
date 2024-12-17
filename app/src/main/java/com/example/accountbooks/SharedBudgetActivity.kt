@@ -62,6 +62,8 @@ class SharedBudgetActivity : AppCompatActivity() {
         addTransactionButton.setOnClickListener {
             Toast.makeText(this, "내역추가 버튼 클릭됨", Toast.LENGTH_SHORT).show()
             // TODO: 내역추가 화면으로 이동 코드 추가
+            val intent = Intent(this, AddItemActivity::class.java)
+            startActivity(intent)
         }
 
         assetsButton.setOnClickListener {

@@ -12,41 +12,30 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AccountBooks"
         tools:targetApi="31">
-
-        <!-- 친구 관리 화면 -->
         <activity
-            android:name=".FriendsActivity"
+            android:name=".CalendarActivity"
             android:exported="false" />
-
-        <!-- 항목 추가 화면 -->
         <activity
             android:name=".AddItemActivity"
-            android:exported="false" />
-
-        <!-- 캘린더 화면 -->
+            android:exported="false" /> <!-- 친구 관리 화면 -->
         <activity
-            android:name=".Calendar"
-            android:exported="false" />
-
-        <!-- 가계부 화면 -->
+            android:name=".FriendsActivity"
+            android:exported="false" /> <!-- 가계부 화면 -->
         <activity
             android:name=".Budget"
-            android:exported="false" />
-
-        <!-- 회원가입 화면 -->
+            android:exported="false" /> <!-- 회원가입 화면 -->
         <activity
             android:name=".RegisterActivity"
-            android:exported="false" />
-
-        <!-- SharedBudgetActivity를 기본 액티비티로 설정 -->
+            android:exported="false" /> <!-- SharedBudgetActivity를 기본 액티비티로 설정 -->
         <activity
             android:name=".SharedBudgetActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
     </application>
+
 </manifest>
