@@ -29,71 +29,73 @@ class SharedBudgetActivity : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
         firestore = FirebaseFirestore.getInstance()
 
-        // 로그인 및 회원가입 버튼 설정
+        // UI 요소 초기화
         val loginButton: Button = findViewById(R.id.btnLogin)
         val registerButton: Button = findViewById(R.id.btnSignup)
+        val friendManagementButton: Button = findViewById(R.id.btnFriendManagement)
+        val fab: FloatingActionButton = findViewById(R.id.fab)
 
-        // 소비지출내역, 내역추가, 자산 버튼 설정 (로그인 전에는 숨김)
+        // 소비지출내역, 내역추가, 자산 버튼 설정
         val expenseHistoryButton: Button = findViewById(R.id.btnExpenseHistory)
         val addTransactionButton: Button = findViewById(R.id.btnAddTransaction)
         val assetsButton: Button = findViewById(R.id.btnAssets)
+        val sharedAccountButton: Button = findViewById(R.id.btnSharedAccount)
 
         expenseHistoryButton.visibility = View.GONE
         addTransactionButton.visibility = View.GONE
         assetsButton.visibility = View.GONE
+        sharedAccountButton.visibility = View.GONE
 
-        // 로그인 버튼 클릭 리스너
-        loginButton.setOnClickListener {
-            loginUser()
-        }
+        // 로그인 버튼 리스너
+        loginButton.setOnClickListener { loginUser() }
 
-        // 회원가입 버튼 클릭 리스너
+        // 회원가입 버튼 리스너
         registerButton.setOnClickListener {
             val intent = Intent(this, RegisterActivity::class.java)
             startActivity(intent)
         }
 
-        // 소비지출내역, 내역추가, 자산 버튼 클릭 리스너 설정
-        expenseHistoryButton.setOnClickListener {
-            Toast.makeText(this, "소비지출내역 버튼 클릭됨", Toast.LENGTH_SHORT).show()
-            // TODO: 소비지출내역 화면으로 이동 코드 추가
-        }
-
-        addTransactionButton.setOnClickListener {
-            Toast.makeText(this, "내역추가 버튼 클릭됨", Toast.LENGTH_SHORT).show()
-            // TODO: 내역추가 화면으로 이동 코드 추가
-            val intent = Intent(this, AddItemActivity::class.java)
+        // 친구 관리 화면 이동
+        friendManagementButton.setOnClickListener {
+            val intent = Intent(this, FriendsActivity::class.java)
             startActivity(intent)
-        }
-
-        assetsButton.setOnClickListener {
-            Toast.makeText(this, "자산 버튼 클릭됨", Toast.LENGTH_SHORT).show()
-            // TODO: 자산 화면으로 이동 코드 추가
         }
 
         // RecyclerView 설정
         val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
-
-        // 어댑터 설정
         accountBookAdapter = AccountBookAdapter(accountBookList) { accountBookName ->
             Toast.makeText(this, "$accountBookName 선택됨", Toast.LENGTH_SHORT).show()
         }
         recyclerView.adapter = accountBookAdapter
 
         // FloatingActionButton 클릭 리스너 (새로운 가계부 추가)
-        val fab: FloatingActionButton = findViewById(R.id.fab)
-        fab.visibility = View.GONE
-        fab.setOnClickListener {
-            showAddAccountBookDialog()
+        fab.setOnClickListener { showAddAccountBookDialog() }
+
+        // 소비지출내역 버튼 클릭
+        expenseHistoryButton.setOnClickListener {
+            Toast.makeText(this, "소비지출내역 버튼 클릭됨", Toast.LENGTH_SHORT).show()
+            // TODO: 소비지출내역 화면으로 이동 코드 추가
         }
 
-        // 친구관리화면으로 넘어가기 (로그인 전에는 숨김)
-        val friendManagementButton: Button = findViewById(R.id.btnFriendManagement)
-        friendManagementButton.visibility = View.GONE
-        friendManagementButton.setOnClickListener {
-            val intent = Intent(this, FriendsActivity::class.java)
+        // 내역추가 버튼 클릭
+        addTransactionButton.setOnClickListener {
+            Toast.makeText(this, "내역추가 버튼 클릭됨", Toast.LENGTH_SHORT).show()
+            val intent = Intent(this, AddItemActivity::class.java)
             startActivity(intent)
+        }
+
+        // 자산 버튼 클릭
+        assetsButton.setOnClickListener {
+            Toast.makeText(this, "자산 버튼 클릭됨", Toast.LENGTH_SHORT).show()
+            // TODO: 자산 화면으로 이동 코드 추가
+        }
+
+        //공유가계부 버튼 클릭
+        sharedAccountButton.setOnClickListener {
+            Toast.makeText(this, "공유 가계부 버튼 클릭됨", Toast.LENGTH_SHORT).show()
+
+            // TODO: 공유 가계부 화면으로 이동 (SharedAccountActivity가 아직 구현되지 않았습니다)
         }
     }
 
@@ -113,6 +115,7 @@ class SharedBudgetActivity : AppCompatActivity() {
                     Toast.makeText(this, "로그인 성공", Toast.LENGTH_SHORT).show()
                     showAccountBookUI()
                     loadAccountBooks() // Firestore에서 가계부 목록 불러오기
+                    loadFriends()      // Firestore에서 친구 목록 불러오기
                 } else {
                     Toast.makeText(this, "로그인 실패: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
                 }
@@ -132,6 +135,7 @@ class SharedBudgetActivity : AppCompatActivity() {
         findViewById<Button>(R.id.btnExpenseHistory).visibility = View.VISIBLE
         findViewById<Button>(R.id.btnAddTransaction).visibility = View.VISIBLE
         findViewById<Button>(R.id.btnAssets).visibility = View.VISIBLE
+        findViewById<Button>(R.id.btnSharedAccount).visibility = View.VISIBLE
     }
 
     // Firestore에서 가계부 목록 불러오기
@@ -154,28 +158,27 @@ class SharedBudgetActivity : AppCompatActivity() {
             }
     }
 
-    // Firestore에 가계부 추가
-    private fun addAccountBookToFirestore(accountBookName: String) {
+    // Firestore에서 친구 목록 불러오기
+    private fun loadFriends() {
         val currentUserId = auth.currentUser?.uid ?: return
 
-        val accountBook = hashMapOf(
-            "name" to accountBookName,
-            "userId" to currentUserId // 현재 사용자의 UID 저장
-        )
-
-        firestore.collection("account_books")
-            .add(accountBook)
-            .addOnSuccessListener { documentReference ->
-                Toast.makeText(this, "가계부 추가됨: ${documentReference.id}", Toast.LENGTH_SHORT).show()
-                accountBookList.add(accountBookName)
-                accountBookAdapter.notifyItemInserted(accountBookList.size - 1)
+        firestore.collection("friends")
+            .whereEqualTo("userId", currentUserId)
+            .get()
+            .addOnSuccessListener { documents ->
+                val friendList = mutableListOf<String>()
+                for (document in documents) {
+                    val friendEmail = document.getString("email") ?: "이메일 없음"
+                    friendList.add(friendEmail)
+                }
+                Toast.makeText(this, "친구 목록 불러오기 성공: ${friendList.size}명", Toast.LENGTH_SHORT).show()
             }
             .addOnFailureListener { e ->
-                Toast.makeText(this, "가계부 추가 실패: ${e.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "친구 목록 불러오기 실패: ${e.message}", Toast.LENGTH_SHORT).show()
             }
     }
 
-    // 가계부 추가를 위한 다이얼로그 표시
+    // 가계부 추가 다이얼로그
     private fun showAddAccountBookDialog() {
         val builder = AlertDialog.Builder(this)
         builder.setTitle("새 가계부 추가")
@@ -184,20 +187,30 @@ class SharedBudgetActivity : AppCompatActivity() {
         input.hint = "가계부 이름 입력"
         builder.setView(input)
 
-        builder.setPositiveButton("추가") { dialog, _ ->
-            val newAccountBookName = input.text.toString()
-            if (newAccountBookName.isNotEmpty()) {
-                addAccountBookToFirestore(newAccountBookName)
+        builder.setPositiveButton("추가") { _, _ ->
+            val accountBookName = input.text.toString()
+            if (accountBookName.isNotEmpty()) {
+                addAccountBookToFirestore(accountBookName)
             } else {
-                Toast.makeText(this, "가계부 이름을 입력해주세요.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "가계부 이름을 입력하세요.", Toast.LENGTH_SHORT).show()
             }
-            dialog.dismiss()
         }
-
-        builder.setNegativeButton("취소") { dialog, _ ->
-            dialog.cancel()
-        }
-
+        builder.setNegativeButton("취소") { dialog, _ -> dialog.cancel() }
         builder.show()
+    }
+
+    private fun addAccountBookToFirestore(accountBookName: String) {
+        val currentUserId = auth.currentUser?.uid ?: return
+
+        firestore.collection("account_books")
+            .add(mapOf("name" to accountBookName, "userId" to currentUserId))
+            .addOnSuccessListener {
+                accountBookList.add(accountBookName)
+                accountBookAdapter.notifyItemInserted(accountBookList.size - 1)
+                Toast.makeText(this, "가계부 추가 완료", Toast.LENGTH_SHORT).show()
+            }
+            .addOnFailureListener { e ->
+                Toast.makeText(this, "가계부 추가 실패: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
     }
 }

@@ -33,6 +33,14 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:text="자산" />
+
+        <!-- 공유가계부 버튼 추가 -->
+        <Button
+            android:id="@+id/btnSharedAccount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="공유 가계부" />
     </LinearLayout>
 
     <!-- RecyclerView (가계부 목록) -->
