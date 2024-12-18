@@ -31,6 +31,7 @@ import android.widget.AdapterView
 import com.example.accountbooks.databinding.ActivityAddItemBinding
 import android.widget.TextView
 import android.widget.ImageButton
+import com.example.accountbooks.extensions.setupToolbar
 
 class AddItemActivity : AppCompatActivity() {
     // Firebase 인증과 Firestore 인스턴스를 저장할 변수 선언
@@ -50,23 +51,7 @@ class AddItemActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         // 툴바 설정
-        val toolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)
-        setSupportActionBar(toolbar)
-        supportActionBar?.setDisplayShowTitleEnabled(false)
-
-        // 타이틀 설정
-        val tvTitle = toolbar.findViewById<TextView>(R.id.tvTitle)
-        tvTitle.text = "내역 추가"
-
-        // 뒤로가기 버튼
-        toolbar.findViewById<ImageButton>(R.id.btnBack).setOnClickListener {
-            finish()
-        }
-
-        // 홈 버튼
-        toolbar.findViewById<ImageButton>(R.id.btnHome).setOnClickListener {
-            finish()
-        }
+        setupToolbar("내역 추가")
 
         auth = FirebaseAuth.getInstance()
         firestore = FirebaseFirestore.getInstance()

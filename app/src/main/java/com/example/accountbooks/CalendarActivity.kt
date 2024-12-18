@@ -10,8 +10,8 @@ import android.widget.AdapterView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.accountbooks.adapter.TransactionAdapter
-import com.example.accountbooks.model.Transaction
+import com.example.accountbooks.adapters.TransactionAdapter
+import com.example.accountbooks.models.Transaction
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import java.text.SimpleDateFormat
@@ -23,6 +23,7 @@ import com.google.firebase.firestore.FieldPath
 import com.example.accountbooks.databinding.ActivityCalendarBinding
 import android.content.Intent
 import android.widget.ImageButton
+import com.example.accountbooks.extensions.setupToolbar
 
 class CalendarActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCalendarBinding
@@ -36,24 +37,7 @@ class CalendarActivity : AppCompatActivity() {
         binding = ActivityCalendarBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // 툴바 설정
-        val toolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)
-        setSupportActionBar(toolbar)
-        supportActionBar?.setDisplayShowTitleEnabled(false)
-
-        // 타이틀 설정
-        val tvTitle = toolbar.findViewById<TextView>(R.id.tvTitle)
-        tvTitle.text = "개인 가계부"
-
-        // 뒤로가기 버튼
-        toolbar.findViewById<ImageButton>(R.id.btnBack).setOnClickListener {
-            finish()
-        }
-
-        // 홈 버튼
-        toolbar.findViewById<ImageButton>(R.id.btnHome).setOnClickListener {
-            finish()
-        }
+        setupToolbar("개인 가계부")
 
         setupCalendarView()
         setupRecyclerView()
@@ -115,7 +99,7 @@ class CalendarActivity : AppCompatActivity() {
                                 try {
                                     Transaction(
                                         id = doc.id,
-                                        amount = (doc.get("amount") as? Number)?.toInt() ?: 0,
+                                        amount = (doc.get("amount") as? Number)?.toLong() ?: 0,
                                         category = doc.getString("category") ?: "",
                                         date = (doc.get("date") as? Timestamp)?.toDate() ?: Date(),
                                         description = doc.getString("description") ?: "",
