@@ -1,209 +1,197 @@
 package com.example.accountbooks
 
-import android.content.Intent
-import android.os.Bundle 
 import androidx.appcompat.app.AppCompatActivity
 
-import androidx.activity.enableEdgeToEdge
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-
-import android.widget.Button        
-import android.widget.EditText      
-import android.widget.Spinner       
-import android.widget.ArrayAdapter  
-import android.widget.Toast       
-
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
-
-import java.util.Date 
-import java.text.SimpleDateFormat
-import java.util.Locale
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
-import android.widget.DatePicker
-import android.widget.TimePicker
-import java.util.Calendar
-import com.google.firebase.Timestamp
+import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.Toast
+
 import com.example.accountbooks.databinding.ActivityAddItemBinding
-import android.widget.TextView
-import android.widget.ImageButton
 import com.example.accountbooks.extensions.setupToolbar
 
+import com.google.firebase.Timestamp
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.QuerySnapshot
+
+import java.text.SimpleDateFormat
+import java.util.*
+
+
 class AddItemActivity : AppCompatActivity() {
-    // Firebase 인증과 Firestore 인스턴스를 저장할 변수 선언
+    private lateinit var binding: ActivityAddItemBinding
+    
     private lateinit var auth: FirebaseAuth
     private lateinit var firestore: FirebaseFirestore
-    private lateinit var binding: ActivityAddItemBinding
+    
     private val accountBookList = mutableListOf<String>()
     private val accountBookIds = mutableListOf<String>()
     private var selectedAccountBookId: String? = null
-    private lateinit var transactionDate: Date
-    private lateinit var btnSave: Button
+    private var transactionDate: Date = Date()
+    private lateinit var accountBookAdapter: ArrayAdapter<String>
 
-    // 액티비티가 생성될 때 호출되는 onCreate 메서드
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        
+        // 화면 초기화
         binding = ActivityAddItemBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        // 툴바 설정
         setupToolbar("내역 추가")
-
+        
+        // Firebase 초기화
         auth = FirebaseAuth.getInstance()
         firestore = FirebaseFirestore.getInstance()
 
-        setupSpinner()
-        loadAccountBooks()
+        setupSpinners() // 스피너(가계부 선택, 카테고리) 설정
+        setupDatePicker() // 날짜 선택 설정
+        setupSaveButton() // 저장 버튼 설정
+    }
+
+    // 스피너(가계부 선택, 카테고리) 설정
+    private fun setupSpinners() {
+        // 가계부 어댑터를 클래스 변수로 선언
+        accountBookAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, accountBookList)
+        accountBookAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        binding.accountBookSpinner.adapter = accountBookAdapter
+
+        binding.accountBookSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                selectedAccountBookId = accountBookIds[position]
+            }
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
 
         // 카테고리 스피너 설정
-        val categorySpinner: Spinner = binding.categorySpinner
         ArrayAdapter.createFromResource(
             this,
             R.array.categories,
             android.R.layout.simple_spinner_item
         ).also { adapter ->
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            categorySpinner.adapter = adapter
+            binding.categorySpinner.adapter = adapter
         }
 
-        // 저장 버튼 클릭 이벤트
-        binding.btnSave.setOnClickListener {
-            saveItem()
-        }
-
-        transactionDate = Date()
-        updateDateDisplay()
-        
-        binding.etDate.setOnClickListener {
-            showDateTimePickerDialog()
-        }
-    }
-
-    private fun setupSpinner() {
-        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, accountBookList)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        binding.accountBookSpinner.adapter = adapter
-
-        binding.accountBookSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                selectedAccountBookId = accountBookIds[position]
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-        }
-    }
-
-    private fun loadAccountBooks() {
+        // 가계부 목록 로드
         val userId = auth.currentUser?.uid ?: return
         
         firestore.collection("account_books")
             .whereEqualTo("userId", userId)
             .get()
-            .addOnSuccessListener { documents ->
-                accountBookList.clear()
-                accountBookIds.clear()
-                
-                for (document in documents) {
-                    val accountBookName = document.getString("name") ?: "이름 없음"
-                    accountBookList.add(accountBookName)
-                    accountBookIds.add(document.id)
-                }
-                
-                (binding.accountBookSpinner.adapter as ArrayAdapter<*>).notifyDataSetChanged()
-                
-                if (accountBookIds.isNotEmpty()) {
-                    selectedAccountBookId = accountBookIds[0]
-                }
+            .addOnSuccessListener { documents ->    // 성공
+                updateAccountBookList(documents)
             }
-            .addOnFailureListener { e ->
-                Toast.makeText(this, "가계부 목록 로드 실패: ${e.message}", Toast.LENGTH_SHORT).show()
+            .addOnFailureListener { e ->    // 실패
+                showToast("가계부 목록 로드 실패: ${e.message}")
             }
     }
 
-    private fun saveItem() {
-        val amount = binding.etAmount.text.toString().toIntOrNull() ?: 0
-        val description = binding.etMemo.text.toString()
-        val category = binding.categorySpinner.selectedItem.toString()
-        val merchant = binding.etMerchant.text.toString().trim()
+    private fun updateAccountBookList(documents: QuerySnapshot) {
+        accountBookList.clear()
+        accountBookIds.clear()
         
-        // 지출/수입 여부 확인
-        val isExpense = binding.rbExpense.isChecked
-        // 지출이면 음수, 수입이면 양수로 저장
-        val finalAmount = if (isExpense) -amount else amount
-
-        // 선택된 가계부 ID 가져오기
-        val selectedPosition = binding.accountBookSpinner.selectedItemPosition
-        if (selectedPosition == -1 || accountBookIds.isEmpty()) {
-            Toast.makeText(this, "가계부를 선택해주세요.", Toast.LENGTH_SHORT).show()
-            return
+        for (document in documents) {
+            accountBookList.add(document.getString("name") ?: "이름 없음")
+            accountBookIds.add(document.id)
         }
-        val selectedAccountBookId = accountBookIds[selectedPosition]
-
-        // Firestore에 저장할 데이터 구성
-        val item = hashMapOf(
-            "amount" to finalAmount,
-            "description" to description,
-            "category" to category,
-            "merchant" to merchant,
-            "date" to Timestamp(transactionDate),
-            "userId" to auth.currentUser?.uid,
-            "accountBookId" to selectedAccountBookId,
-            "isExpense" to isExpense
-        )
-
-        // Firestore의 'items' 컬렉션에 데이터 추가
-        firestore.collection("items")
-            .add(item)
-            .addOnSuccessListener { _ ->
-                Toast.makeText(this, "내역이 추가되었습니다.", Toast.LENGTH_SHORT).show()
-                finish()
-            }
-            .addOnFailureListener { e ->
-                Toast.makeText(this, "내역 추가 실패: ${e.message}", Toast.LENGTH_SHORT).show()
-            }
+        
+        // 어댑터에 직접 변경 알림
+        accountBookAdapter.notifyDataSetChanged()  // 이렇게 하면 더 간단!
+        
+        if (accountBookIds.isNotEmpty()) {
+            selectedAccountBookId = accountBookIds[0]
+        }
     }
 
-    // 날짜 표시 업데이트 함수
+    // 날짜 선택 설정
+    private fun setupDatePicker() {
+        updateDateDisplay()
+        binding.etDate.setOnClickListener {
+            val calendar = Calendar.getInstance().apply { time = transactionDate }
+
+            DatePickerDialog(
+                this,
+                { _, year, month, dayOfMonth ->
+                    TimePickerDialog(
+                        this,
+                        { _, hourOfDay, minute ->
+                            calendar.apply {
+                                set(Calendar.YEAR, year)
+                                set(Calendar.MONTH, month)
+                                set(Calendar.DAY_OF_MONTH, dayOfMonth)
+                                set(Calendar.HOUR_OF_DAY, hourOfDay)
+                                set(Calendar.MINUTE, minute)
+                                set(Calendar.SECOND, 0)
+                            }
+                            transactionDate = calendar.time
+                            updateDateDisplay()
+                        },
+                        calendar.get(Calendar.HOUR_OF_DAY),
+                        calendar.get(Calendar.MINUTE),
+                        true
+                    ).show()
+                },
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH)
+            ).show()
+        }
+    }
+
+
+    // 저장 버튼 설정
+    private fun setupSaveButton() {
+        binding.btnSave.setOnClickListener {
+            val amount = binding.etAmount.text.toString()
+            if (amount.isEmpty()) {
+                showToast("금액을 입력해주세요")
+                return@setOnClickListener
+            }
+
+            // 거래 데이터 생성 및 저장
+            val isExpense = binding.rbExpense.isChecked
+            val finalAmount = if (isExpense) -amount.toInt() else amount.toInt()
+
+            val item = hashMapOf(
+                "amount" to finalAmount,
+                "description" to binding.etMemo.text.toString(),
+                "category" to binding.categorySpinner.selectedItem.toString(),
+                "merchant" to binding.etMerchant.text.toString().trim(),
+                "date" to Timestamp(transactionDate),
+                "userId" to (auth.currentUser?.uid),
+                "accountBookId" to accountBookIds[binding.accountBookSpinner.selectedItemPosition],
+                "isExpense" to isExpense
+            )
+
+            // Firestore에 저장
+            firestore.collection("items")
+                .add(item)
+                .addOnSuccessListener {
+                    showToast("내역이 추가되었습니다")
+                    finish()
+                }
+                .addOnFailureListener { e ->
+                    showToast("내역 추가 실패: ${e.message}")
+                }
+        }
+    }
+
+
+
+    // 날짜 표시 업데이트
     private fun updateDateDisplay() {
-        val dateFormat = SimpleDateFormat("yyyy년 MM월 dd일 HH시 mm분", Locale.KOREA)
+        val dateFormat = SimpleDateFormat("yyyy/MM/dd일 HH:mm", Locale.KOREA)
         binding.etDate.setText(dateFormat.format(transactionDate))
     }
 
-    // 날짜 시간 선택 다이얼로그
-    private fun showDateTimePickerDialog() {
-        val calendar = Calendar.getInstance().apply {
-            time = transactionDate
-        }
-
-        DatePickerDialog(
-            this,
-            { _, year, month, dayOfMonth ->
-                calendar.set(Calendar.YEAR, year)
-                calendar.set(Calendar.MONTH, month)
-                calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-
-                TimePickerDialog(
-                    this,
-                    { _, hourOfDay, minute ->
-                        calendar.set(Calendar.HOUR_OF_DAY, hourOfDay)
-                        calendar.set(Calendar.MINUTE, minute)
-                        calendar.set(Calendar.SECOND, 0)
-                        transactionDate = calendar.time
-                        updateDateDisplay()
-                    },
-                    calendar.get(Calendar.HOUR_OF_DAY),
-                    calendar.get(Calendar.MINUTE),
-                    true
-                ).show()
-            },
-            calendar.get(Calendar.YEAR),
-            calendar.get(Calendar.MONTH),
-            calendar.get(Calendar.DAY_OF_MONTH)
-        ).show()
+    // 토스트 메시지 표시
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
+
 }
+
 
