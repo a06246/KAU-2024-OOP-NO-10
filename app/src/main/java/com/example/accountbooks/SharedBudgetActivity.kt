@@ -97,9 +97,10 @@ class SharedBudgetActivity : AppCompatActivity() {
         //공유가계부 버튼 클릭
         sharedAccountButton.setOnClickListener {
             Toast.makeText(this, "공유 가계부 버튼 클릭됨", Toast.LENGTH_SHORT).show()
-
-            // TODO: 공유 가계부 화면으로 이동 (SharedAccountActivity가 아직 구현되지 않았습니다)
+            val intent = Intent(this, Budget::class.java)
+            startActivity(intent)
         }
+
     }
 
     // 로그인 처리 (Firebase Authentication)
