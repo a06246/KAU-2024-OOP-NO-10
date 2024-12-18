@@ -85,7 +85,6 @@ class CalendarActivity : AppCompatActivity() {
     private fun loadTransactions(date: Date) {
         val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return
         
-        // 해당 날짜의 시작과 끝 설정
         val calendar = Calendar.getInstance()
         calendar.time = date
         calendar.set(Calendar.HOUR_OF_DAY, 0)
@@ -98,16 +97,13 @@ class CalendarActivity : AppCompatActivity() {
         calendar.set(Calendar.SECOND, 59)
         val endDate = calendar.time
 
-        // 먼저 사용자의 myAccountBook ID를 가져옵니다
         db.collection("account_books")
             .whereEqualTo("userId", userId)
-            .whereEqualTo("isDefault", true)  // isDefault가 true인 것이 myAccountBook입니다
+            .whereEqualTo("isDefault", true)
             .get()
-            .addOnSuccessListener { accountBooks ->
-                if (!accountBooks.isEmpty) {
-                    val myAccountBookId = accountBooks.documents[0].id
-
-                    // myAccountBook에 해당하는 거래 내역만 가져옵니다
+            .addOnSuccessListener { documents ->
+                val myAccountBookId = documents.documents.firstOrNull()?.id
+                if (myAccountBookId != null) {
                     db.collection("items")
                         .whereEqualTo("accountBookId", myAccountBookId)
                         .whereGreaterThanOrEqualTo("date", startDate)
@@ -123,7 +119,8 @@ class CalendarActivity : AppCompatActivity() {
                                         category = doc.getString("category") ?: "",
                                         date = (doc.get("date") as? Timestamp)?.toDate() ?: Date(),
                                         description = doc.getString("description") ?: "",
-                                        userId = doc.getString("userId") ?: ""
+                                        userId = doc.getString("userId") ?: "",
+                                        merchant = doc.getString("merchant") ?: ""
                                     )
                                 } catch (e: Exception) {
                                     null
@@ -131,13 +128,7 @@ class CalendarActivity : AppCompatActivity() {
                             }
                             updateTransactionsList(newTransactions)
                         }
-                        .addOnFailureListener { e ->
-                            Toast.makeText(this, "데이터 로드 실패: ${e.message}", Toast.LENGTH_SHORT).show()
-                        }
                 }
-            }
-            .addOnFailureListener { e ->
-                Toast.makeText(this, "가계부 정보 로드 실패: ${e.message}", Toast.LENGTH_SHORT).show()
             }
     }
     

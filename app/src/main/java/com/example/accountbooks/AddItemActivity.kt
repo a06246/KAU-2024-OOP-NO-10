@@ -143,6 +143,12 @@ class AddItemActivity : AppCompatActivity() {
         val amount = binding.etAmount.text.toString().toIntOrNull() ?: 0
         val description = binding.etDescription.text.toString()
         val category = binding.categorySpinner.selectedItem.toString()
+        val merchant = binding.etMerchant.text.toString().trim()
+        
+        // 지출/수입 여부 확인
+        val isExpense = binding.rbExpense.isChecked
+        // 지출이면 음수, 수입이면 양수로 저장
+        val finalAmount = if (isExpense) -amount else amount
 
         // 선택된 가계부 ID 가져오기
         val selectedPosition = binding.accountBookSpinner.selectedItemPosition
@@ -154,12 +160,14 @@ class AddItemActivity : AppCompatActivity() {
 
         // Firestore에 저장할 데이터 구성
         val item = hashMapOf(
-            "amount" to amount,
+            "amount" to finalAmount,
             "description" to description,
             "category" to category,
-            "date" to Timestamp(transactionDate), // 선택한 날짜로 Timestamp 생성
+            "merchant" to merchant,
+            "date" to Timestamp(transactionDate),
             "userId" to auth.currentUser?.uid,
-            "accountBookId" to selectedAccountBookId
+            "accountBookId" to selectedAccountBookId,
+            "isExpense" to isExpense
         )
 
         // Firestore의 'items' 컬렉션에 데이터 추가

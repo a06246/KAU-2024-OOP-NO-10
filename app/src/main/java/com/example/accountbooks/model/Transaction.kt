@@ -8,5 +8,6 @@ data class Transaction(
     val category: String = "",
     val date: Date = Date(),
     val description: String = "",
-    val userId: String = ""
+    val userId: String = "",
+    val merchant: String = ""
 ) 

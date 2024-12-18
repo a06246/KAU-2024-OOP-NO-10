@@ -9,8 +9,32 @@
         android:id="@+id/toolbar"
         layout="@layout/toolbar_main"/>
 
+    <!-- 지출/수입 선택 버튼 그룹 추가 -->
+    <RadioGroup
+        android:id="@+id/transactionTypeGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp">
 
-    <!-- 내용 -->
+        <RadioButton
+            android:id="@+id/rbExpense"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="지출"
+            android:checked="true"
+            android:layout_marginEnd="32dp"/>
+
+        <RadioButton
+            android:id="@+id/rbIncome"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="수입"/>
+    </RadioGroup>
+
+    <!-- 가계부 선택 -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -23,6 +47,21 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp" />
 
+    <!-- 거래처 입력 필드 추가 -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="거래처"
+        android:layout_marginBottom="4dp"/>
+
+    <EditText
+        android:id="@+id/etMerchant"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="거래처명을 입력하세요"
+        android:layout_marginBottom="16dp"/>
+
+    <!-- 내용 -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
