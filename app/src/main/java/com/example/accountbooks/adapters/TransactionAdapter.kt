@@ -15,9 +15,7 @@ class TransactionAdapter(private val transactions: List<Transaction>) :
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val tvAmount: TextView = view.findViewById(R.id.tvAmount)
-        val tvCategory: TextView = view.findViewById(R.id.tvCategory)
-        val tvmemo: TextView = view.findViewById(R.id.tvmemo)
-        val tvDate: TextView = view.findViewById(R.id.tvDate)
+        val tvCategoryAndMerchant: TextView = view.findViewById(R.id.tvCategoryAndMerchant)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -28,10 +26,22 @@ class TransactionAdapter(private val transactions: List<Transaction>) :
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val transaction = transactions[position]
-        holder.tvAmount.text = "${transaction.amount}원"
-        holder.tvCategory.text = transaction.category
-        holder.tvmemo.text = transaction.memo
-        holder.tvDate.text = SimpleDateFormat("HH:mm", Locale.KOREA).format(transaction.date)
+        val context = holder.itemView.context
+        
+        // 금액 포맷팅 및 색상 설정
+        val amount = transaction.amount
+        val formattedAmount = String.format("%,d원", Math.abs(amount))
+        val prefix = if (amount < 0) "-" else "+"
+        
+        holder.tvAmount.text = "$prefix $formattedAmount"
+        holder.tvAmount.setTextColor(if (amount < 0) 
+            context.getColor(android.R.color.holo_red_dark)
+        else 
+            context.getColor(android.R.color.holo_blue_dark))
+
+        // 카테고리와 거래처 표시
+        val merchant = if (transaction.merchant.isNotEmpty()) transaction.merchant else "미입력"
+        holder.tvCategoryAndMerchant.text = "${transaction.category} | $merchant"
     }
 
     override fun getItemCount() = transactions.size

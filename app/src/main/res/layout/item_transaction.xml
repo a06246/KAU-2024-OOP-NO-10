@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="12dp">
 
     <TextView
         android:id="@+id/tvAmount"
@@ -13,21 +13,17 @@
         android:textStyle="bold"/>
 
     <TextView
-        android:id="@+id/tvCategory"
+        android:id="@+id/tvCategoryAndMerchant"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"/>
+        android:layout_marginTop="4dp"
+        android:textSize="14sp"
+        android:textColor="#666666"/>
 
-    <TextView
-        android:id="@+id/tvmemo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"/>
-
-    <TextView
-        android:id="@+id/tvDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="12dp"
+        android:background="#E0E0E0"/>
 
 </LinearLayout>
