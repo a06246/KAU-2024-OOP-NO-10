@@ -21,6 +21,8 @@ import com.google.firebase.Timestamp
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.FieldPath
 import com.example.accountbooks.databinding.ActivityCalendarBinding
+import android.content.Intent
+import android.widget.ImageButton
 
 class CalendarActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCalendarBinding
@@ -34,6 +36,25 @@ class CalendarActivity : AppCompatActivity() {
         binding = ActivityCalendarBinding.inflate(layoutInflater)
         setContentView(binding.root)
         
+        // 툴바 설정
+        val toolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
+
+        // 타이틀 설정
+        val tvTitle = toolbar.findViewById<TextView>(R.id.tvTitle)
+        tvTitle.text = "개인 가계부"
+
+        // 뒤로가기 버튼
+        toolbar.findViewById<ImageButton>(R.id.btnBack).setOnClickListener {
+            finish()
+        }
+
+        // 홈 버튼
+        toolbar.findViewById<ImageButton>(R.id.btnHome).setOnClickListener {
+            finish()
+        }
+
         setupCalendarView()
         setupRecyclerView()
         loadTransactions(selectedDate)
@@ -64,6 +85,7 @@ class CalendarActivity : AppCompatActivity() {
     private fun loadTransactions(date: Date) {
         val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return
         
+        // 해당 날짜의 시작과 끝 설정
         val calendar = Calendar.getInstance()
         calendar.time = date
         calendar.set(Calendar.HOUR_OF_DAY, 0)
@@ -76,32 +98,46 @@ class CalendarActivity : AppCompatActivity() {
         calendar.set(Calendar.SECOND, 59)
         val endDate = calendar.time
 
-        // myAccountBook에 해당하는 거래 내역만 직접 가져옵니다
-        db.collection("items")
+        // 먼저 사용자의 myAccountBook ID를 가져옵니다
+        db.collection("account_books")
             .whereEqualTo("userId", userId)
-            .whereGreaterThanOrEqualTo("date", startDate)
-            .whereLessThanOrEqualTo("date", endDate)
-            .orderBy("date", Query.Direction.DESCENDING)
+            .whereEqualTo("isDefault", true)  // isDefault가 true인 것이 myAccountBook입니다
             .get()
-            .addOnSuccessListener { itemDocuments ->
-                val newTransactions = itemDocuments.mapNotNull { doc ->
-                    try {
-                        Transaction(
-                            id = doc.id,
-                            amount = (doc.get("amount") as? Number)?.toInt() ?: 0,
-                            category = doc.getString("category") ?: "",
-                            date = (doc.get("date") as? Timestamp)?.toDate() ?: Date(),
-                            description = doc.getString("description") ?: "",
-                            userId = doc.getString("userId") ?: ""
-                        )
-                    } catch (e: Exception) {
-                        null
-                    }
+            .addOnSuccessListener { accountBooks ->
+                if (!accountBooks.isEmpty) {
+                    val myAccountBookId = accountBooks.documents[0].id
+
+                    // myAccountBook에 해당하는 거래 내역만 가져옵니다
+                    db.collection("items")
+                        .whereEqualTo("accountBookId", myAccountBookId)
+                        .whereGreaterThanOrEqualTo("date", startDate)
+                        .whereLessThanOrEqualTo("date", endDate)
+                        .orderBy("date", Query.Direction.DESCENDING)
+                        .get()
+                        .addOnSuccessListener { itemDocuments ->
+                            val newTransactions = itemDocuments.mapNotNull { doc ->
+                                try {
+                                    Transaction(
+                                        id = doc.id,
+                                        amount = (doc.get("amount") as? Number)?.toInt() ?: 0,
+                                        category = doc.getString("category") ?: "",
+                                        date = (doc.get("date") as? Timestamp)?.toDate() ?: Date(),
+                                        description = doc.getString("description") ?: "",
+                                        userId = doc.getString("userId") ?: ""
+                                    )
+                                } catch (e: Exception) {
+                                    null
+                                }
+                            }
+                            updateTransactionsList(newTransactions)
+                        }
+                        .addOnFailureListener { e ->
+                            Toast.makeText(this, "데이터 로드 실패: ${e.message}", Toast.LENGTH_SHORT).show()
+                        }
                 }
-                updateTransactionsList(newTransactions)
             }
             .addOnFailureListener { e ->
-                Toast.makeText(this, "데이터 로드 실패: ${e.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "가계부 정보 로드 실패: ${e.message}", Toast.LENGTH_SHORT).show()
             }
     }
     

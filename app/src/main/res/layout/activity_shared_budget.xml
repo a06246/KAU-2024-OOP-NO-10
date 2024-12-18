@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     tools:context=".SharedBudgetActivity">
 
-    <!-- 소비지출, 내역추가, 자산 버튼 -->
+    <!-- 개인 가계부, 내역추가, 자산 버튼 -->
     <LinearLayout
         android:id="@+id/layoutButtons"
         android:layout_width="wrap_content"
@@ -18,7 +18,7 @@
             android:id="@+id/btnExpenseHistory"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="소비지출내역" />
+            android:text="개인 가계부" />
 
         <Button
             android:id="@+id/btnAddTransaction"

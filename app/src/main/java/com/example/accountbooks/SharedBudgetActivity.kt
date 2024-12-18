@@ -36,7 +36,7 @@ class SharedBudgetActivity : AppCompatActivity() {
         val friendManagementButton: Button = findViewById(R.id.btnFriendManagement)
         val fab: FloatingActionButton = findViewById(R.id.fab)
 
-        // 소비지출내역, 내역추가, 자산 버튼 설정
+        // 개인 가계부, 내역추가, 자산 버튼 설정
         val expenseHistoryButton: Button = findViewById(R.id.btnExpenseHistory)
         val addTransactionButton: Button = findViewById(R.id.btnAddTransaction)
         val assetsButton: Button = findViewById(R.id.btnAssets)
@@ -73,10 +73,10 @@ class SharedBudgetActivity : AppCompatActivity() {
         // FloatingActionButton 클릭 리스너 (새로운 가계부 추가)
         fab.setOnClickListener { showAddAccountBookDialog() }
 
-        // 소비지출내역 버튼 클릭
+        // 개인 가계부 버튼 클릭
         expenseHistoryButton.setOnClickListener {
-            Toast.makeText(this, "소비지출내역 버튼 클릭됨", Toast.LENGTH_SHORT).show()
-            // TODO: 소비지출내역 화면으로 이동 코드 추가
+            Toast.makeText(this, "개인 가계부 버튼 클릭됨", Toast.LENGTH_SHORT).show()
+            // TODO: 개인 가계부 화면으로 이동 코드 추가
             val intent = Intent(this, CalendarActivity::class.java)
             startActivity(intent)
         }

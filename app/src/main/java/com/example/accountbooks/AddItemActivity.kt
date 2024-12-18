@@ -29,6 +29,8 @@ import com.google.firebase.Timestamp
 import android.view.View
 import android.widget.AdapterView
 import com.example.accountbooks.databinding.ActivityAddItemBinding
+import android.widget.TextView
+import android.widget.ImageButton
 
 class AddItemActivity : AppCompatActivity() {
     // Firebase 인증과 Firestore 인스턴스를 저장할 변수 선언
@@ -39,12 +41,32 @@ class AddItemActivity : AppCompatActivity() {
     private val accountBookIds = mutableListOf<String>()
     private var selectedAccountBookId: String? = null
     private lateinit var transactionDate: Date
+    private lateinit var btnSave: Button
 
     // 액티비티가 생성될 때 호출되는 onCreate 메서드
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAddItemBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // 툴바 설정
+        val toolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
+
+        // 타이틀 설정
+        val tvTitle = toolbar.findViewById<TextView>(R.id.tvTitle)
+        tvTitle.text = "내역 추가"
+
+        // 뒤로가기 버튼
+        toolbar.findViewById<ImageButton>(R.id.btnBack).setOnClickListener {
+            finish()
+        }
+
+        // 홈 버튼
+        toolbar.findViewById<ImageButton>(R.id.btnHome).setOnClickListener {
+            finish()
+        }
 
         auth = FirebaseAuth.getInstance()
         firestore = FirebaseFirestore.getInstance()
@@ -66,11 +88,6 @@ class AddItemActivity : AppCompatActivity() {
         // 저장 버튼 클릭 이벤트
         binding.btnSave.setOnClickListener {
             saveItem()
-        }
-
-        // 뒤로가기 버튼 클릭 이벤트
-        binding.btnBack.setOnClickListener {
-            finish() // 현재 액티비티 종료
         }
 
         transactionDate = Date()
