@@ -1,40 +1,40 @@
 app/
-├── build.gradle.kts                 # 앱 수준 빌드 설정
+├── build.gradle.kts                 # App level build configuration
 ├── src/main/
     ├── java/com/example/accountbooks/
-    │   ├── data/                    # 데이터 계층
-    │   │   ├── model/              # 데이터 모델
-    │   │   │   ├── Transaction.kt  # 거래 데이터
-    │   │   │   ├── User.kt        # 사용자 데이터
-    │   │   │   ├── AccountBook.kt # 가계부 데이터
-    │   │   │   └── Friend.kt      # 친구 데이터
+    │   ├── data/                    # Data Layer
+    │   │   ├── model/              # Data Models
+    │   │   │   ├── Transaction.kt  # Transaction data
+    │   │   │   ├── User.kt        # User data
+    │   │   │   ├── AccountBook.kt # Account book data
+    │   │   │   └── Friend.kt      # Friend data
     │   │   │
-    │   │   ├── repository/         # 데이터 저장소
+    │   │   ├── repository/         # Data Repositories
     │   │   │   ├── TransactionRepository.kt
     │   │   │   ├── UserRepository.kt
     │   │   │   ├── AccountBookRepository.kt
     │   │   │   └── FriendRepository.kt
     │   │   │
-    │   │   └── datasource/         # 데이터 소스
-    │   │       ├── local/          # 로컬 저장소
-    │   │       └── remote/         # Firebase 연동
+    │   │   └── datasource/         # Data Sources
+    │   │       ├── local/          # Local storage
+    │   │       └── remote/         # Firebase integration
     │   │
-    │   ├── domain/                 # 비즈니스 로직
-    │   │   └── usecase/           # 유스케이스
-    │   │       ├── transaction/    # 거래 관련
-    │   │       ├── user/          # 사용자 관련
-    │   │       ├── accountbook/   # 가계부 관련
-    │   │       └── friend/        # 친구 관련
+    │   ├── domain/                 # Business Logic
+    │   │   └── usecase/           # Use Cases
+    │   │       ├── transaction/    # Transaction related
+    │   │       ├── user/          # User related
+    │   │       ├── accountbook/   # Account book related
+    │   │       └── friend/        # Friend related
     │   │
-    │   ├── presentation/           # UI 계층
-    │   │   ├── view/              # UI 컴포넌트
-    │   │   │   ├── activity/      # 액티비티
-    │   │   │   ├── fragment/      # 프래그먼트
-    │   │   │   └── adapter/       # RecyclerView 어댑터
+    │   ├── presentation/           # UI Layer
+    │   │   ├── view/              # UI Components
+    │   │   │   ├── activity/      # Activities
+    │   │   │   ├── fragment/      # Fragments
+    │   │   │   └── adapter/       # RecyclerView Adapters
     │   │   │
     │   │   └── viewmodel/         # ViewModels
     │   │
-    │   └── util/                  # 유틸리티 클래스
+    │   └── util/                  # Utility Classes
     │
-    ├── res/                        # 리소스 파일
-    └── AndroidManifest.xml         # 앱 매니페스트
+    ├── res/                        # Resource Files
+    └── AndroidManifest.xml         # App Manifest
