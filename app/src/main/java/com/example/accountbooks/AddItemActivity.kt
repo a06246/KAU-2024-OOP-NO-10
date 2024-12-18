@@ -141,7 +141,7 @@ class AddItemActivity : AppCompatActivity() {
 
     private fun saveItem() {
         val amount = binding.etAmount.text.toString().toIntOrNull() ?: 0
-        val description = binding.etDescription.text.toString()
+        val description = binding.etMemo.text.toString()
         val category = binding.categorySpinner.selectedItem.toString()
         val merchant = binding.etMerchant.text.toString().trim()
         
