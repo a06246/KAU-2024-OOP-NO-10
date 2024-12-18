@@ -16,7 +16,7 @@ class TransactionAdapter(private val transactions: List<Transaction>) :
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val tvAmount: TextView = view.findViewById(R.id.tvAmount)
         val tvCategory: TextView = view.findViewById(R.id.tvCategory)
-        val tvDescription: TextView = view.findViewById(R.id.tvDescription)
+        val tvmemo: TextView = view.findViewById(R.id.tvmemo)
         val tvDate: TextView = view.findViewById(R.id.tvDate)
     }
 
@@ -30,7 +30,7 @@ class TransactionAdapter(private val transactions: List<Transaction>) :
         val transaction = transactions[position]
         holder.tvAmount.text = "${transaction.amount}원"
         holder.tvCategory.text = transaction.category
-        holder.tvDescription.text = transaction.description
+        holder.tvmemo.text = transaction.memo
         holder.tvDate.text = SimpleDateFormat("HH:mm", Locale.KOREA).format(transaction.date)
     }
 

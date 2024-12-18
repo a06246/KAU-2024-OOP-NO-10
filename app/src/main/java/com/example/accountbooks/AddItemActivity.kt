@@ -53,7 +53,6 @@ class AddItemActivity : AppCompatActivity() {
 
     // 스피너(가계부 선택, 카테고리) 설정
     private fun setupSpinners() {
-        // 가계부 어댑터를 클래스 변수로 선언
         accountBookAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, accountBookList)
         accountBookAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         binding.accountBookSpinner.adapter = accountBookAdapter
@@ -99,7 +98,7 @@ class AddItemActivity : AppCompatActivity() {
         }
         
         // 어댑터에 직접 변경 알림
-        accountBookAdapter.notifyDataSetChanged()  // 이렇게 하면 더 간단!
+        accountBookAdapter.notifyDataSetChanged()
         
         if (accountBookIds.isNotEmpty()) {
             selectedAccountBookId = accountBookIds[0]
@@ -157,7 +156,7 @@ class AddItemActivity : AppCompatActivity() {
 
             val item = hashMapOf(
                 "amount" to finalAmount,
-                "description" to binding.etMemo.text.toString(),
+                "memo" to binding.etMemo.text.toString(),
                 "category" to binding.categorySpinner.selectedItem.toString(),
                 "merchant" to binding.etMerchant.text.toString().trim(),
                 "date" to Timestamp(transactionDate),
