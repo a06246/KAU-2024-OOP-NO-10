@@ -10,6 +10,7 @@
         android:id="@+id/toolbar"
         layout="@layout/toolbar_main" />
 
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -41,6 +42,7 @@
             android:layout_marginBottom="8dp"
             android:gravity="center_vertical">
 
+            <!-- 분류 텍스트뷰 -->
             <TextView
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
@@ -57,6 +59,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
+                <!-- 지출 버튼 -->
                 <RadioButton
                     android:id="@+id/rbExpense"
                     android:layout_width="wrap_content"
@@ -66,6 +69,7 @@
                     android:textSize="16sp"
                     android:text="지출" />
 
+                <!-- 수입 버튼 -->
                 <RadioButton
                     android:id="@+id/rbIncome"
                     android:layout_width="wrap_content"
@@ -83,6 +87,7 @@
             android:orientation="horizontal"
             android:layout_marginBottom="8dp">
 
+            <!-- 가계부 텍스트뷰 -->
             <TextView
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
@@ -91,6 +96,7 @@
                 android:layout_marginEnd="8dp"
                 android:text="가계부" />
 
+            <!-- 가계부 스피너 -->
             <Spinner
                 android:id="@+id/accountBookSpinner"
                 android:layout_width="0dp"
@@ -108,6 +114,7 @@
             android:orientation="horizontal"
             android:layout_marginBottom="8dp">
 
+            <!-- 카테고리 텍스트뷰 -->
             <TextView
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
@@ -116,6 +123,7 @@
                 android:layout_marginEnd="8dp"
                 android:text="카테고리" />
 
+            <!-- 카테고리 스피너 -->
             <Spinner
                 android:id="@+id/categorySpinner"
                 android:layout_width="0dp"
@@ -133,6 +141,7 @@
             android:orientation="horizontal"
             android:layout_marginBottom="8dp">
 
+            <!-- 날짜 텍스트뷰 -->
             <TextView
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
@@ -141,6 +150,7 @@
                 android:layout_marginEnd="16dp"
                 android:text="날짜" />
 
+            <!-- 날짜 입력 -->
             <EditText
                 android:id="@+id/etDate"
                 android:layout_width="0dp"
@@ -154,13 +164,14 @@
                 android:hint="날짜를 선택하세요" />
         </LinearLayout>
 
-        <!-- 거래처 ��력 섹션 -->
+        <!-- 거래처 입력 섹션 -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_marginBottom="8dp">
 
+            <!-- 거래처 텍스트뷰 -->
             <TextView
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
@@ -169,6 +180,7 @@
                 android:layout_marginEnd="16dp"
                 android:text="거래처" />
 
+            <!-- 거래처 입력 -->
             <EditText
                 android:id="@+id/etMerchant"
                 android:layout_width="0dp"
@@ -187,6 +199,7 @@
             android:orientation="horizontal"
             android:layout_marginBottom="8dp">
 
+            <!-- 메모 텍스트뷰 -->
             <TextView
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
@@ -195,6 +208,7 @@
                 android:layout_marginEnd="16dp"
                 android:text="메모" />
 
+            <!-- 메모 입력 -->
             <EditText
                 android:id="@+id/etMemo"
                 android:layout_width="0dp"
@@ -206,7 +220,7 @@
                 android:background="@null" />
         </LinearLayout>
 
-        <!-- 단 버튼 영역 -->
+        <!-- 저장 버튼 -->
         <Button
             android:id="@+id/btnSave"
             android:layout_width="match_parent"
