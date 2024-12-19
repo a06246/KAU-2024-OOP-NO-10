@@ -10,6 +10,12 @@ import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.firestore.FirebaseFirestore
+import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.auth.FirebaseAuth
+
+
 
 
 class Budget : AppCompatActivity() {
@@ -27,11 +33,19 @@ class Budget : AppCompatActivity() {
     // 멤버 이름과 색상 매핑
     private val memberColorMap = mutableMapOf<String, String>()
 
+    private lateinit var auth: FirebaseAuth
+    private val friendEmailList = mutableListOf<String>() // 친구 이메일을 저장할 리스트
+    private lateinit var friendAdapter: FriendAdapter // RecyclerView 어댑터
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.fragment_budget)
+        setContentView(R.layout.fragment_budget) // 레이아웃 설정
+
+        setupToolbar() // Toolbar 설정
 
         // Firestore 초기화
+        auth = FirebaseAuth.getInstance()
         firestore = FirebaseFirestore.getInstance()
 
         // UI 초기화
@@ -43,6 +57,49 @@ class Budget : AppCompatActivity() {
         // 버튼 이벤트 리스너
         accountBookButton.setOnClickListener { fetchAccountBookNames() }
         friendAddButton.setOnClickListener { fetchFriendList() }
+
+        // RecyclerView 설정
+        val recyclerView: RecyclerView = findViewById(R.id.recyclerViewFriends)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        friendAdapter = FriendAdapter(friendEmailList) { friendEmail ->
+            Toast.makeText(this, "$friendEmail 선택됨", Toast.LENGTH_SHORT).show()
+        }
+        recyclerView.adapter = friendAdapter
+
+        // 친구 목록 불러오기
+        loadFriends()
+    }
+
+    private fun loadFriends() {
+        val currentUserId = auth.currentUser?.uid ?: return
+
+        firestore.collection("friends")
+            .whereEqualTo("userId", currentUserId) // 현재 사용자가 추가한 친구만 가져옴
+            .get()
+            .addOnSuccessListener { documents ->
+                friendEmailList.clear()
+                for (document in documents) {
+                    val friendEmail = document.getString("email") ?: "이메일 없음"
+                    friendEmailList.add(friendEmail) // 친구 이메일 리스트에 추가
+                }
+                friendAdapter.notifyDataSetChanged() // UI 업데이트
+            }
+            .addOnFailureListener { e ->
+                Toast.makeText(this, "친구 목록 불러오기 실패: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
+    }
+
+    private fun setupToolbar() {
+        val toolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)
+            ?: throw IllegalStateException("Toolbar not found in fragment_budget.xml")
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
+
+        val btnBack = toolbar.findViewById<ImageButton>(R.id.btnBack)
+
+        btnBack?.setOnClickListener {
+            finish() // 현재 액티비티 종료, 이전 액티비티로 돌아감
+        }
     }
 
 

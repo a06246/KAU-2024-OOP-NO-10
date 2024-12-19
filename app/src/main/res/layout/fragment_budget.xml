@@ -5,7 +5,36 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- 타이틀 -->
+    <!-- 상단 툴바 -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:elevation="4dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <!-- 뒤로 가기 버튼 -->
+            <ImageButton
+                android:id="@+id/btnBack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@android:drawable/ic_menu_revert"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="뒤로가기 버튼"
+                android:padding="8dp" />
+        </LinearLayout>
+    </androidx.appcompat.widget.Toolbar>
+
+    <!-- 중간 타이틀 -->
     <TextView
         android:id="@+id/tvAccountBookTitle"
         android:layout_width="wrap_content"
@@ -14,11 +43,10 @@
         android:textSize="20sp"
         android:textStyle="bold"
         android:textColor="#333333"
-        android:gravity="center"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp" />
 
     <!-- 버튼 그룹 -->
     <LinearLayout
@@ -41,8 +69,8 @@
             android:id="@+id/btnFriendAdd"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="친구 추가"
-            android:layout_marginStart="8dp" />
+            android:layout_marginStart="8dp"
+            android:text="친구 추가" />
     </LinearLayout>
 
     <!-- 멤버 아이콘 컨테이너 -->
@@ -56,23 +84,44 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- 스크롤 영역 (거래 내역 표시) -->
+    <!-- 친구 목록 RecyclerView -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewFriends"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/memberContainer"
+        app:layout_constraintBottom_toTopOf="@id/scrollView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- 스크롤 영역 -->
+    <!-- 스크롤 영역 -->
     <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:contentDescription="거래 내역이 표시됩니다. 스크롤해서 확인하세요."
-        app:layout_constraintTop_toBottomOf="@id/memberContainer"
+        android:contentDescription="스크롤하여 거래 내역을 확인하세요."
+        app:layout_constraintTop_toBottomOf="@id/recyclerViewFriends"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
+        <!-- 하나의 직접 자식 레이아웃 -->
         <LinearLayout
-            android:id="@+id/historyContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="8dp" />
+            android:padding="8dp">
+
+            <!-- 거래 내역 컨테이너 -->
+            <LinearLayout
+                android:id="@+id/historyContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="8dp" />
+
+        </LinearLayout>
     </ScrollView>
 
 
