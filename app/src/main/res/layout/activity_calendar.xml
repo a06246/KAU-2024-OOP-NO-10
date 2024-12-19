@@ -1,18 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- 최상위 레이아웃 - 세로 방향으로 요소들을 배치 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <!-- 상단 툴바 포함 -->
     <include
         android:id="@+id/toolbar"
         layout="@layout/toolbar_main" />
 
+    <!-- 스크롤 가능한 메인 컨텐츠 영역 -->
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true">
 
+        <!-- 메인 컨텐츠를 세로로 배치하는 컨테이너 -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -20,6 +24,7 @@
             android:paddingStart="16dp"
             android:paddingEnd="16dp">
 
+            <!-- 월별 총 지출액 표시 -->
             <TextView
                 android:id="@+id/tvTotalMonthExpense"
                 android:layout_width="match_parent"
@@ -30,41 +35,47 @@
                 android:textSize="25sp"
                 android:textStyle="bold" />
 
+            <!-- 달력 뷰 -->
             <CalendarView
                 android:id="@+id/calendarView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
+            <!-- 달력과 일별 내역 사이의 구분선 -->
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="#E0E0E0" />
 
+            <!-- 선택된 날짜 표시 -->
             <TextView
                 android:id="@+id/tvToday"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
+                android:layout_marginStart="10dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="4dp"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
+            <!-- 선택된 날짜의 지출 금액 -->
             <TextView
                 android:id="@+id/tvTodayExpense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
+                android:layout_marginStart="10dp"
                 android:textSize="16sp" />
 
+            <!-- 선택된 날짜의 수입 금액 -->
             <TextView
                 android:id="@+id/tvTodayIncome"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
+                android:layout_marginStart="10dp"
                 android:layout_marginBottom="8dp"
                 android:textSize="16sp" />
 
+            <!-- 거래 내역 목록 -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvTransactions"
                 android:layout_width="match_parent"

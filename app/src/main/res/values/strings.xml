@@ -7,6 +7,8 @@
         <item>교통비</item>
         <item>문화/여가</item>
         <item>의료/건강</item>
+        <item>용돈</item>
+        <item>월급</item>
         <item>기타</item>
     </string-array>
 
