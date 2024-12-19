@@ -21,12 +21,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.abs
 
-/**
- * 달력 화면을 관리하는 액티비티
- * - 일별 거래내역 조회
- * - 월별 지출 합계 표시
- * - 캘린더를 통한 날짜 선택 기능
- */
+
 class CalendarActivity : AppCompatActivity() {
     // View Binding 객체
     private lateinit var binding: ActivityCalendarBinding
@@ -41,11 +36,11 @@ class CalendarActivity : AppCompatActivity() {
     
     // 날짜 관련 변수
     private var selectedDate: Date = Date()  // 현재 선택된 날짜
-    private var currentYearMonth: Calendar = Calendar.getInstance()  // 현재 표시 중인 년/월
+    private var currentYearMonth: Calendar = Calendar.getInstance()  
     
     // 날짜 포시 형식 지정
-    private val dayFormatter = SimpleDateFormat("dd일 EEEE", Locale.KOREA)  // 요일 포맷 (예: 19일 수요일)
-    private val monthFormatter = SimpleDateFormat("M", Locale.KOREA)  // 월 포맷 (예: 12)
+    private val dayFormatter = SimpleDateFormat("dd일 EEEE", Locale.KOREA)  
+    private val monthFormatter = SimpleDateFormat("M", Locale.KOREA) 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,83 +51,83 @@ class CalendarActivity : AppCompatActivity() {
         loadData()    // 초기 데이터 로드
     }
 
-    /**
-     * UI 컴포넌트 초기화 및 이벤트 리스너 설정
-     */
+    
     private fun setupViews() {
+        
+        
         setupToolbar("개인 가계부")
         
-        // 캘린더뷰 날짜 선택 리스너 설정
+        // 캘린더에서 날짜를 선택했을 때 실행될 동작을 설정합니다
         binding.calendarView.setOnDateChangeListener { _, year, month, day ->
+            // 선택한 날짜의 시간을 0시 0분 0초로 설정합니다
             val calendar = Calendar.getInstance().apply {
                 set(year, month, day, 0, 0, 0)
                 set(Calendar.MILLISECOND, 0)
             }
+            // 선택된 날짜를 저장하고 데이터를 불러옵니다
             selectedDate = calendar.time
             currentYearMonth = calendar
             loadData()
         }
 
-        // RecyclerView 설정
+        // 거래 내역을 보여줄 어댑터를 생성합니다
         transactionAdapter = TransactionAdapter(transactions)
+
+        // RecyclerView의 기본 설정을 합니다
         binding.rvTransactions.apply {
+            // 어댑터 연결
             adapter = transactionAdapter
+            // 세로 방향으로 목록이 나열되도록 설정
             layoutManager = LinearLayoutManager(this@CalendarActivity)
         }
     }
 
-    /**
-     * 사용자의 기본 가계부 데이터 로드
-     */
+
     private fun loadData() {
+        // 현재 로그인한 사용자의 ID를 가져옵니다. 없으면 함수 종료
         val userId = auth.currentUser?.uid ?: return
         
-        // 사용자의 기본 가계부 ID 조회
+        // Firestore에서 사용자의 기본 가계부를 찾습니다
         db.collection("account_books")
-            .whereEqualTo("userId", userId)
-            .whereEqualTo("isDefault", true)
+            .whereEqualTo("userId", userId)     // 현재 사용자의 가계부만
+            .whereEqualTo("isDefault", true)    // 기본 가계부인 것만
             .get()
             .addOnSuccessListener { documents ->
+                // 찾은 가계부의 ID로 거래내역을 불러옵니다
                 documents.documents.firstOrNull()?.id?.let { accountBookId ->
                     loadTransactions(accountBookId)
                 }
             }
     }
 
-    /**
-     * 특정 가계부의 거래내역 조회
-     * @param accountBookId 가계부 ID
-     */
+  
     private fun loadTransactions(accountBookId: String) {
-        // 선택된 날짜의 거래내역 조회
-        val dailyRange = getDailyRange()
+        // 선택한 날짜의 거래내역 조회
+        val dailyRange = getDailyRange()    // 하루 시작과 끝 시간
         db.collection("items")
             .whereEqualTo("accountBookId", accountBookId)
-            .whereGreaterThanOrEqualTo("date", dailyRange.first)
-            .whereLessThanOrEqualTo("date", dailyRange.second)
-            .orderBy("date", Query.Direction.DESCENDING)
+            .whereGreaterThanOrEqualTo("date", dailyRange.first)   // 하루 시작시간 이후
+            .whereLessThanOrEqualTo("date", dailyRange.second)     // 하루 끝시간 이전
+            .orderBy("date", Query.Direction.DESCENDING)           // 최신순 정렬
             .get()
             .addOnSuccessListener { documents ->
-                updateDailyTransactions(documents)
+                updateDailyTransactions(documents)    // 일별 거래내역 업데이트
             }
 
-        // 선택된 월의 전체 거래내역 조회
-        val monthlyRange = getMonthlyRange()
+        // 선택한 월의 전체 거래내역 조회
+        val monthlyRange = getMonthlyRange() // 월 시작과 끝 시간
         db.collection("items")
             .whereEqualTo("accountBookId", accountBookId)
-            .whereGreaterThanOrEqualTo("date", monthlyRange.first)
-            .whereLessThanOrEqualTo("date", monthlyRange.second)
-            .orderBy("date", Query.Direction.DESCENDING)
+            .whereGreaterThanOrEqualTo("date", monthlyRange.first) // 월 시작시간 이후
+            .whereLessThanOrEqualTo("date", monthlyRange.second)   // 월 끝시간 이전
+            .orderBy("date", Query.Direction.DESCENDING)           // 최신순 정렬
             .get()
             .addOnSuccessListener { documents ->
-                updateMonthlyExpense(documents)
+                updateMonthlyExpense(documents)       // 월별 지출 합계 업데이트
             }
     }
 
-    /**
-     * 하루 시작과 끝 시간 범위 계산
-     * @return Pair<시작시간, 종료시간>
-     */
+
     private fun getDailyRange(): Pair<Date, Date> {
         val calendar = Calendar.getInstance().apply { time = selectedDate }
         return Pair(
@@ -149,10 +144,7 @@ class CalendarActivity : AppCompatActivity() {
         )
     }
 
-    /**
-     * 월 시작과 끝 시간 범위 계산
-     * @return Pair<시작시간, 종료시간>
-     */
+
     private fun getMonthlyRange(): Pair<Date, Date> {
         val calendar = currentYearMonth.clone() as Calendar
         return Pair(
@@ -171,20 +163,18 @@ class CalendarActivity : AppCompatActivity() {
         )
     }
 
-    /**
-     * 일별 거래내역 UI 업데이트
-     * @param documents Firestore 조회 결과
-     */
+
     private fun updateDailyTransactions(documents: QuerySnapshot) {
+        // 기존 거래내역 목록을 비우고 새로운 데이터로 채움
         transactions.clear()
         transactions.addAll(documents.mapNotNull { parseTransaction(it) })
         transactionAdapter.notifyDataSetChanged()
 
-        // 일별 수입/지출 합계 계산
+        // 수입과 지출 합계 계산
         val expenses = transactions.filter { it.amount < 0 }.sumOf { abs(it.amount) }
         val income = transactions.filter { it.amount > 0 }.sumOf { it.amount }
 
-        // UI 업데이트
+        // 화면 업데이트
         binding.apply {
             tvToday.text = dayFormatter.format(selectedDate)
             tvTodayExpense.text = "지출 | ${expenses.formatWithComma()}원"
@@ -192,25 +182,20 @@ class CalendarActivity : AppCompatActivity() {
         }
     }
 
-    /**
-     * 월별 지출 합계 UI 업데이트
-     * @param documents Firestore 조회 결과
-     */
+
     private fun updateMonthlyExpense(documents: QuerySnapshot) {
+        // 월별 총 지출액 계산 (음수 금액만 합산)
         val totalExpense = documents.mapNotNull { doc ->
             val amount = (doc.get("amount") as? Number)?.toLong() ?: 0
             if (amount < 0) abs(amount) else 0L
         }.sum()
 
+        // 월별 지출 표시
         val month = monthFormatter.format(currentYearMonth.time)
         binding.tvTotalMonthExpense.text = "${month}월 ${totalExpense.formatWithComma()}원"
     }
 
-    /**
-     * Firestore 문서를 Transaction 객체로 변환
-     * @param document Firestore 문서
-     * @return Transaction? 변환된 거래내역 객체 또는 null
-     */
+
     private fun parseTransaction(document: DocumentSnapshot): Transaction? {
         return try {
             Transaction(
@@ -229,8 +214,6 @@ class CalendarActivity : AppCompatActivity() {
         }
     }
 
-    /**
-     * 숫자를 천단위 구분자가 있는 문자열로 변환
-     */
+
     private fun Long.formatWithComma(): String = String.format("%,d", this)
 }
